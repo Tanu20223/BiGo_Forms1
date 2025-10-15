@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Training Follow-up Form</title>
+  <link rel="stylesheet" href="followup.css" />
+</head>
+<body>
+  <div class="form-container">
+    <h2>Training Follow-up Form</h2>
+
+    <form id="followupForm">
+      <!-- Hidden field for phone (from login URL or session) -->
+      <input type="hidden" id="currentPhone" name="currentPhone">
+
+      <!-- Auto-filled common fields (read-only) -->
+      <label for="fullname">Full Name</label>
+      <input id="fullname" name="fullname" type="text" required />
+
+      <label for="contact">Contact Number</label>
+      <input id="contact" name="contact" type="tel" required />
+      <input type="hidden" id="phoneFromLogin" name="phoneFromLogin">
+
+      <label for="email">Email Address</label>
+      <input id="email" name="email" type="email" required />
+
+      <label for="currentAddress">Current Address</label>
+      <input id="currentAddress" name="currentAddress" type="text" required />
+
+      <label for="permanentAddress">Permanent Address</label>
+      <input id="permanentAddress" name="permanentAddress" type="text" />
+
+      <label for="position">Position Applied For</label>
+      <input id="position" name="position" type="text" required />
+
+      <!-- Follow-up details -->
+      <label for="interviewBy">Interview By</label>
+      <input id="interviewBy" name="interviewBy" type="text" required />
+
+      <label for="trainingBy">Training By</label>
+      <input id="trainingBy" name="trainingBy" type="text" required />
+
+      <label for="trainingStatus">Training Status</label>
+      <select id="trainingStatus" name="trainingStatus" required>
+        <option value="">-- Select Status --</option>
+        <option>Trained</option>
+        <option>Not Trained</option>
+      </select>
+
+      <label for="selection">Selection</label>
+      <select id="selection" name="selection" required>
+        <option value="">-- Select --</option>
+        <option>Yes</option>
+        <option>No</option>
+      </select>
+
+      <label for="finalRemark">Final Remark</label>
+      <textarea id="finalRemark" name="finalRemark" rows="3" required></textarea>
+
+      <button type="submit" class="btn-submit">Submit Follow-up</button>
+      <p id="status"></p>
+    </form>
+  </div>
+
+  <script src="followup3.js"></script>
+</body>
+</html>

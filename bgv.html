@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BGV Form</title>
+  <link rel="stylesheet" href="bgv.css" />
+</head>
+<body>
+  <div class="form-container">
+    <h2>BGV Form</h2>
+    <form id="bgv">
+      
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email ID</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone No.</label>
+        <input type="text" id="phone" name="phone" required>
+      </div>
+
+      <div class="form-group">
+        <label for="aadharLinkPhone">Aadhar Linked Phone No.</label>
+        <input type="text" id="aadharLinkPhone" name="aadharLinkPhone" required>
+      </div>
+
+      <div class="form-group">
+        <label for="fatherName">Father’s Name</label>
+        <input type="text" id="fatherName" name="fatherName" required>
+      </div>
+
+      <div class="form-group">
+        <label for="aadharAddress">Aadhar Address</label>
+        <textarea id="aadharAddress" name="aadharAddress" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="currentAddress">Current Address</label>
+        <textarea id="currentAddress" name="currentAddress" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="residenceType">Is Aadhar Address Rented or Owned?</label>
+        <select id="residenceType" name="residenceType" required>
+          <option value="">Select</option>
+          <option value="rented">Rented</option>
+          <option value="owned">Owned</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" name="dob" required>
+      </div>
+
+      <div class="form-group">
+        <label for="aadharNo">Aadhar No.</label>
+        <input type="text" id="aadharNo" name="aadharNo" required>
+        <label>Upload Aadhar Photo (Front)</label>
+        <input type="file" id="aadharFront" name="aadharFront" required>
+        <label>Upload Aadhar Photo (Back)</label>
+        <input type="file" id="aadharBack" name="aadharBack" required>
+      </div>
+
+      <div class="form-group">
+        <label for="voterNo">Voter ID No.</label>
+        <input type="text" id="voterNo" name="voterNo">
+        <label>Upload Voter Photo (Front)</label>
+        <input type="file" id="voterFront" name="voterFront">
+        <label>Upload Voter Photo (Back)</label>
+        <input type="file" id="voterBack" name="voterBack">
+      </div>
+
+      <div class="form-group">
+        <label for="dlNo">Driving License No.</label>
+        <input type="text" id="dlNo" name="dlNo">
+        <label>Upload Driving License (Front)</label>
+        <input type="file" id="dlFront" name="dlFront">
+        <label>Upload Driving License (Back)</label>
+        <input type="file" id="dlBack" name="dlBack">
+      </div>
+
+      <div class="form-group">
+        <label for="panNo">PAN No.</label>
+        <input type="text" id="panNo" name="panNo">
+        <label>Upload PAN Photo (Front)</label>
+        <input type="file" id="panFront" name="panFront">
+        <label>Upload PAN Photo (Back)</label>
+        <input type="file" id="panBack" name="panBack">
+      </div>
+
+      <div class="form-group">
+        <label for="selfie">Upload Your Selfie</label>
+        <input type="file" id="selfie" name="selfie" required>
+      </div>
+
+      <div class="form-group">
+        <label for="referrer">Who Referred You?</label>
+        <input type="text" id="referrer" name="referrer">
+      </div>
+
+      <div class="form-group">
+        <label for="bgvType">BGV Type</label>
+        <select id="bgvType" name="bgvType" required>
+          <option value="">Select Type</option>
+          <option value="rental">Rental</option>
+          <option value="job">Job</option>
+        </select>
+      </div>
+
+      <!-- Rental Section -->
+      <div class="form-group hidden" id="rentalSection">
+        <label for="rentPurpose">Purpose of Rent</label>
+        <input type="text" id="rentPurpose" name="rentPurpose">
+      </div>
+
+      <!-- Job Section -->
+      <div class="form-group hidden" id="jobSection">
+        <label for="companyName">Previous Company Name</label>
+        <input type="text" id="companyName" name="companyName">
+        <label for="position">Job Position</label>
+        <input type="text" id="position" name="position">
+        <label for="joinDate">Previous Company Join Date</label>
+        <input type="date" id="joinDate" name="joinDate">
+      </div>
+
+      <div class="form-group">
+        <label for="receipt">Upload Receipt Screenshot for BGV Refundable Fee (₹500)</label>
+        <input type="file" id="receipt" name="receipt" required>
+      </div>
+
+      <div class="form-group">
+        <label for="utrNo">Payment UTR No.</label>
+        <input type="text" id="utrNo" name="utrNo" required>
+      </div>
+
+      <button type="submit" class="btn-submit">Submit</button>
+    </form>
+
+    <p id="successMessage" style="color:green; margin-top:10px;"></p>
+  </div>
+
+  <script src="bgv.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Candidate Login</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="phone">Enter Your Phone Number</label>
+      <input id="phone" name="phone" type="tel" required pattern="[0-9]{10}" placeholder="10-digit number">
+      <button type="submit" class="btn-submit">Login</button>
+    </form>
+    <p id="status" class="status"></p>
+  </div>
+
+  <script src="login2.js"></script>
+</body>
+</html>
