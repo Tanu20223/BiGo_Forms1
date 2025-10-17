@@ -1,0 +1,129 @@
+vehicle handover
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Handover Form</title>
+<link rel="stylesheet" href="vehicle.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>Vehicle Handover Form</h2>
+  <form id="handoverForm">
+
+
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+
+    <!-- Contact & Handover Info -->
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="representative">BiGo Representative Name</label>
+      <input type="text" id="representative" name="representative" required>
+    </div>
+    <div class="form-group">
+      <label for="location">Handover Location</label>
+      <input type="text" id="location" name="location" required>
+    </div>
+    <div class="form-group">
+  <label for="handoverType">Type of Handover</label>
+  <select id="handoverType" name="handoverType" required>
+    <option value="">Select Handover Type</option>
+    <option value="new_client_vehicle">New Vehicle of Client</option>
+    <option value="new_rider_vehicle">New Vehicle of Rider</option>
+    <option value="other">Other</option>
+  </select>
+ </div>
+
+
+    <!-- Recipient Info -->
+    <div class="form-group">
+      <label for="recipientName">Recipient Full Name</label>
+      <input type="text" id="recipientName" name="recipientName" required>
+    </div>
+   <div class="form-group">
+  <label for="recipientType">Recipient Type</label>
+  <select id="recipientType" name="recipientType" required>
+    <option value="">Select Recipient Type</option>
+    <option value="client">Client</option>
+    <option value="rider">Rider</option>
+  </select>
+ </div>
+
+    <div class="form-group">
+      <label for="contact">Contact Number</label>
+      <input type="text" id="contact" name="contact" required>
+    </div>
+    <div class="form-group">
+      <label for="recipientEmail">Recipient Email</label>
+      <input type="email" id="recipientEmail" name="recipientEmail" required>
+    </div>
+
+    <!-- IDs and Photos -->
+    <div class="form-group">
+      <label for="aadharNumber">Aadhar Number</label>
+      <input type="text" id="aadharNumber" name="aadharNumber">
+      <label for="aadharPhoto">Upload Aadhar Photo</label>
+      <input type="file" id="aadharPhoto" name="aadharPhoto">
+    </div>
+
+    <div class="form-group">
+      <label for="panNumber">PAN Number</label>
+      <input type="text" id="panNumber" name="panNumber">
+      <label for="panPhoto">Upload PAN Photo</label>
+      <input type="file" id="panPhoto" name="panPhoto">
+    </div>
+
+    <div class="form-group">
+      <label for="voterNumber">Voter Number</label>
+      <input type="text" id="voterNumber" name="voterNumber">
+      <label for="voterPhoto">Upload Voter Photo</label>
+      <input type="file" id="voterPhoto" name="voterPhoto">
+    </div>
+
+    <!-- Vehicle Info -->
+    <div class="form-group">
+      <label for="vehicleSpeed">Vehicle Type</label>
+      <select id="vehicleSpeed" name="vehicleSpeed" required>
+        <option value="">Select Speed Type</option>
+        <option value="high">High Speed</option>
+        <option value="low">Low Speed</option>
+      </select>
+    </div>
+    <div class="form-group" id="licenseGroup" style="display:none;">
+      <label for="drivingLicenseNumber">Driving License Number</label>
+      <input type="text" id="drivingLicenseNumber" name="drivingLicenseNumber">
+      <label for="drivingLicense">Upload Driving License</label>
+      <input type="file" id="drivingLicense" name="drivingLicense">
+    </div>
+
+    <div class="form-group">
+      <label for="regNumber">Vehicle Registration Number</label>
+      <input type="text" id="regNumber" name="regNumber" required>
+    </div>
+    <div class="form-group">
+      <label for="odometer">Current Odometer Reading</label>
+      <input type="text" id="odometer" name="odometer" required>
+    </div>
+    <div class="form-group">
+      <label for="odometerPhoto">Upload Odometer Photo</label>
+      <input type="file" id="odometerPhoto" name="odometerPhoto">
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="successMessage" style="color:green; margin-top:10px;"></p>
+</div>
+
+<script src="vehicle.js"></script>
+</body>
+</html>
