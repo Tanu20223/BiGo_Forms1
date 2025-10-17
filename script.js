@@ -5,27 +5,112 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const phone = form.phone.value.trim();
 
-  status.innerText = "Checking...";
+  if (!phone || !/^\d{10}$/.test(phone)) {
+    status.innerText = "❌ Please enter a valid 10-digit phone number";
+    status.style.color = "red";
+    return;
+  }
 
-  // Replace with your Google Apps Script web app URL
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwJrCDa-CTgZ2DTdbXRVCwS5HwWYOM_Kf8niTroSivEiU8pAP20ZE8GOZlmcUJpxrY6Ng/exec";
+  status.innerText = "Checking...";
+  status.style.color = "blue";
+
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw8LOGcHOdrGH48c2GLcNw6esEkF4R7kbgNraFn8hWsgDQCIfvyoTTJOeJvyO0cS-hpmQ/exec";
 
   try {
-    const response = await fetch(`${WEB_APP_URL}?action=checkStatus&phone=${phone}`);
-    const result = await response.json();
+    const url = `${WEB_APP_URL}?action=getDetails&phone=${phone}&t=${Date.now()}`;
+    
+    // Try JSONP first (bypasses CORS)
+    let result;
+    try {
+      result = await jsonpRequest(url);
+    } catch (jsonpError) {
+      // Fallback to regular fetch
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      result = await response.json();
+    }
 
-    const statusText = (result.status || "").toLowerCase();
+    console.log("API Response:", result);
 
-    if (statusText === "all done") {
-      // Status is "all done" → redirect to followup form
-      window.location.href = `followup2.html?phone=${phone}`;
+    if (result.status === "found") {
+      const data = result.data;
+      
+      // Convert all status fields to lowercase for comparison
+      const mainStatus = (data.status || "").toLowerCase().trim();
+      const verificationStatus = (data.verification || "").toLowerCase().trim();
+      const groundVerificationStatus = (data['Ground Verification'] || "").toLowerCase().trim();
+
+      console.log("Status check:", { 
+        mainStatus, 
+        verificationStatus, 
+        groundVerificationStatus 
+      });
+
+      // CORRECTED LOGIC: Cumulative conditions
+      if (mainStatus === "all done" && verificationStatus === "done" && groundVerificationStatus === "done") {
+        // All three conditions met → vehicle.html
+        window.location.href = `vehicle.html?phone=${encodeURIComponent(phone)}`;
+      } else if (mainStatus === "all done" && verificationStatus === "done") {
+        // First two conditions met → onground.html
+        window.location.href = `onground.html?phone=${encodeURIComponent(phone)}`;
+      } else if (mainStatus === "all done") {
+        // Only first condition met → followup.html
+        window.location.href = `followup2.html?phone=${encodeURIComponent(phone)}`;
+      } else {
+        // No special conditions met → interview.html
+        window.location.href = `interview.html?phone=${encodeURIComponent(phone)}`;
+      }
+    } else if (result.status === "not_found") {
+      status.innerText = "❌ Phone number not found. Please check the number or contact support.";
+      status.style.color = "red";
     } else {
-      // Any other status → redirect to interview form
-      window.location.href = `interview.html?phone=${phone}`;
+      status.innerText = "❌ Error: " + (result.message || "Unknown error occurred");
+      status.style.color = "red";
     }
 
   } catch (err) {
-    status.innerText = "❌ Error: " + err.message;
+    console.error("Fetch error:", err);
+    status.innerHTML = `
+      ❌ Connection Error: ${err.message}
+      <br><br>
+      <strong>Troubleshooting steps:</strong>
+      <br>1. Check your internet connection
+      <br>2. Make sure the Google Apps Script is deployed correctly
+      <br>3. Try refreshing the page
+    `;
+    status.style.color = "red";
   }
 });
 
+// JSONP function for CORS bypass
+function jsonpRequest(url) {
+  return new Promise((resolve, reject) => {
+    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    
+    window[callbackName] = function(data) {
+      delete window[callbackName];
+      document.body.removeChild(script);
+      resolve(data);
+    };
+    
+    const script = document.createElement('script');
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + callbackName;
+    
+    script.onerror = function() {
+      delete window[callbackName];
+      document.body.removeChild(script);
+      reject(new Error('JSONP request failed'));
+    };
+    
+    document.body.appendChild(script);
+    
+    // Timeout after 10 seconds
+    setTimeout(() => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+        delete window[callbackName];
+        reject(new Error('JSONP request timeout'));
+      }
+    }, 10000);
+  });
+}
