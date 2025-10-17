@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BiGo Rider Background Verification Form</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>BiGo Rider Background Verification Form</h2>
+
+    <form id="bigoForm">
+
+      <label>Rider’s Full Name</label>
+      <input type="text" name="rider_name" required />
+
+      <label>Years at Current Residence</label>
+      <input type="text" name="residence_years" />
+
+      <label>Behavior According to Neighbors</label>
+      <textarea name="behavior"></textarea>
+
+      <label>Any Disputes or Complaints?</label>
+      <textarea name="disputes"></textarea>
+
+      <label>Number of People Living with Rider</label>
+      <input type="number" name="family_count" min="0" />
+
+      <h3>Family Members and Phone Numbers</h3>
+
+      <div id="familyMembersSection">
+        <div class="family-row">
+          <input type="text" name="family_name[]" placeholder="Enter family member name" />
+          <input type="tel" name="family_phone[]" placeholder="Enter phone number" />
+          <button type="button" class="remove-row-btn">✖</button>
+        </div>
+      </div>
+
+      <button type="button" id="addMemberBtn" class="small-btn">+ Add Member</button>
+
+      <label>Rider’s Current Occupation</label>
+      <input type="text" name="occupation" />
+
+      <label>Any Criminal Record or Bad Reputation?</label>
+      <textarea name="criminal_record"></textarea>
+
+      <label>Known to Consume Alcohol or Illegal Substances?</label>
+      <textarea name="substance_use"></textarea>
+
+      <label>Relationship with Neighbors/Shopkeepers</label>
+      <textarea name="relationship"></textarea>
+
+      <label>Would You Recommend for Trusted Job?</label>
+      <textarea name="recommendation"></textarea>
+
+      <label>Associations with Suspicious Individuals or Groups?</label>
+      <textarea name="associations"></textarea>
+
+      <label>Suitability for Customer-facing Job (Why/Why not)</label>
+      <textarea name="suitability"></textarea>
+
+      <label>Any Complaints About Behavior Toward Women/Children?</label>
+      <textarea name="complaints"></textarea>
+
+      <label>Additional Remarks</label>
+      <textarea name="remarks"></textarea>
+
+      <hr />
+
+      <h3>Signature</h3>
+      <label>Upload Signature (Image)</label>
+      <input type="file" name="signatureFile" id="signatureFile" accept="image/*" required />
+
+      <button type="submit" id="submitBtn">Submit Form</button>
+    </form>
+
+    <p id="responseMessage"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
