@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
       data.family_details = familyDetails;
       data.signature = signatureData;
 
-      fetch("https://script.google.com/macros/s/AKfycbyu4a_p4NgiZWHtgM7KLibBQa53Bmns-ZJCXaUxlDOmWUuaB54n94yHJIYwrZxv9Th0/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbxJin1_Id8vpCh4ULJ81ORZBs6kEgRYY3moZDRdCpg7_KsrToUgibBeRo3osp-xFSPe1g/exec", {
         method: "POST",
         body: JSON.stringify(data)
       })
@@ -70,5 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
   });
 });
+
 
 
