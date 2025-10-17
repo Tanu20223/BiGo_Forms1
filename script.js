@@ -14,7 +14,7 @@ form.addEventListener("submit", async (e) => {
   status.innerText = "Checking...";
   status.style.color = "blue";
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyx2Z2ob6j5J2P7lSDUG8UDlH8oIEtAMQIhR4mgw1yHoGPKyXMnqZ_w-23GcmZtigV84A/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbycqORx_eoZtbUIBYSFBqHpaA01xhj3CtFaKEZbAFRma5ppKtAvk57r9cFxkmzEovCFPA/exec";
 
   try {
     const url = `${WEB_APP_URL}?action=getDetails&phone=${phone}&t=${Date.now()}`;
@@ -114,6 +114,7 @@ function jsonpRequest(url) {
     }, 10000);
   });
 }
+
 
 
 
