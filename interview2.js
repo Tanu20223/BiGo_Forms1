@@ -124,6 +124,7 @@ function sendData(base64Data, filename) {
     company: form.company.value,
     qualification: form.qualification.value,
     skills: form.skills.value,
+    interviewType: form.interviewType.value,
     cv_base64: base64Data,
     cv_filename: filename
   };
@@ -143,6 +144,7 @@ function sendData(base64Data, filename) {
     })
     .catch(err => { status.innerText = "❌ Error: " + err.message; });
 }
+
 
 
 
