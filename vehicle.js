@@ -102,7 +102,7 @@ form.addEventListener('submit', e => {
 
         // 5. Send to Google
         // Use your correct, active deployment URL
-        return fetch('https://script.google.com/macros/s/AKfycbz-0zbFG4__wUc_hHdRQBDS0MRtFoQYbnBjjndTaxyjy2iWEZIQi51UeltXj2J5KX00/exec', {
+        return fetch('https://script.google.com/macros/s/AKfycbw0lDwTVddQOQfLBC5NXaZnv0qjF0F9TijkmHpBJey9gnQoESejJwCyETnE1-2NJTokuw/exec', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: { 'Content-Type': 'text/plain' }
@@ -132,4 +132,5 @@ form.addEventListener('submit', e => {
         submitBtn.disabled = false;
         submitBtn.innerText = "Submit";
     });
+
 });
