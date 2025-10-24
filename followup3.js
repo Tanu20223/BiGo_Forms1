@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
@@ -41,6 +40,22 @@ document.addEventListener("DOMContentLoaded", () => {
       status.innerText = "❌ Error fetching candidate data.";
     });
 
+  // ====== FINAL REMARK CHARACTER LIMIT ======
+  const finalRemark = document.getElementById("finalRemark");
+  const remarkCount = document.getElementById("remarkCount");
+
+  finalRemark.addEventListener("input", () => {
+    const count = finalRemark.value.length;
+    remarkCount.textContent = `${count} / 50`;
+
+    // Optional: change color when near limit
+    if (count >= 45) {
+      remarkCount.style.color = "red";
+    } else {
+      remarkCount.style.color = "gray";
+    }
+  });
+
   // ====== SUBMIT FOLLOW-UP ======
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -70,6 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = `bgv.html?phone=${encodeURIComponent(phoneFromLogin)}`;
           } else {
             form.reset();
+            remarkCount.textContent = "0 / 50";
+            remarkCount.style.color = "gray";
           }
 
         } else {
