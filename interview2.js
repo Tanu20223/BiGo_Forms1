@@ -53,7 +53,6 @@ function fetchCandidateData(phone) {
         form.position.value = r["Position"] || "";
         form.experience.value = r["Experience"] || "";
         form.company.value = r["Company"] || "";
-        form.ctc.value = r["CTC"] || "";
         form.qualification.value = r["Qualification"] || "";
         form.skills.value = r["Skills"] || "";
         form.interviewType.value = r["Interview Type"] || "";
@@ -121,7 +120,6 @@ function sendData(base64Data, filename) {
     position: form.position.value,
     experience: form.experience.value,
     company: form.company.value,
-    ctc: form.ctc.value,
     skills: form.skills.value,
     qualification: form.qualification.value,
     cv_base64: base64Data,
@@ -143,3 +141,4 @@ function sendData(base64Data, filename) {
     })
     .catch(err => { status.innerText = "❌ Error: " + err.message; });
 }
+
