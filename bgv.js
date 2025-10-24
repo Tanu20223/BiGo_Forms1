@@ -5,7 +5,7 @@ const bgvType = document.getElementById("bgvType");
 const rentalSection = document.getElementById("rentalSection");
 const jobSection = document.getElementById("jobSection");
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwlcu5W6OczWR20gHZAPmyD1C8yL_MvMTBIZ0_s41ZdqiGXR7qLhsdOYmUfq3AD2weBMg/exec"; // 🔁 replace with your Apps Script URL
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx1ERXSIr1i8VbaoCvhSq2kjTkb8XywZQmTKHP5JihuYhQt7T9mOvoS3YKlqunEzE-9iA/exec"; // replace with your Apps Script URL
 
 // =============================
 // 🌟 AUTO FETCH DATA FROM MAIN SHEET
@@ -19,14 +19,12 @@ window.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Fetch candidate data
   fetch(`${WEB_APP_URL}?action=getCandidate&phone=${encodeURIComponent(phone)}`)
     .then(res => res.json())
     .then(data => {
       if (data.status === "success" && data.record) {
         const r = data.record;
 
-        // Auto-fill & lock common fields
         form.name.value = r["Full Name"] || "";
         form.email.value = r["Email Address"] || "";
         form.phone.value = r["Contact Number"] || phone;
@@ -35,8 +33,7 @@ window.addEventListener("DOMContentLoaded", () => {
         form.residenceType.value = r["Residence Type"] || "";
         form.dob.value = r["Date of Birth"] || "";
         form.currentAddress.value = r["Current Address"] || "";
-        
-        // Make fetched fields readonly
+
         ["name", "email", "phone","currentAddress"]
           .forEach(id => document.getElementById(id).readOnly = true);
 
@@ -78,7 +75,7 @@ form.addEventListener("submit", e => {
 
   const fileIds = [
     'aadharFront','aadharBack','voterFront','voterBack',
-    'dlFront','dlBack','panFront','panBack','selfie','receipt'
+    'dlFront','dlBack','panFront','panBack','swastasathiPhoto','selfie'
   ];
 
   Promise.all(fileIds.map(id => toBase64(document.getElementById(id).files[0])))
@@ -106,15 +103,15 @@ form.addEventListener("submit", e => {
         panNo: form.panNo.value,
         panFront: files[6],
         panBack: files[7],
-        selfie: files[8],
+        swastasathiNo: form.swastasathiNo.value,
+        swastasathiPhoto: files[8],
+        selfie: files[9],
         referrer: form.referrer.value,
         bgvType: form.bgvType.value,
         rentPurpose: form.rentPurpose.value,
         companyName: form.companyName.value,
         position: form.position.value,
-        joinDate: form.joinDate.value,
-        receipt: files[9],
-        utrNo: form.utrNo.value,
+        joinDate: form.joinDate.value
       };
 
       return fetch(WEB_APP_URL, {
