@@ -5,12 +5,11 @@ const interviewType = document.getElementById("interviewType");
 const skillsSection = document.getElementById("skillsSection");
 const cvSection = document.getElementById("cvSection");
 const status = document.getElementById("status");
-const fileSizeInfo = document.getElementById("fileSizeInfo");
 
-// Web App URL
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyl2_jAkT3CTHxbOY1zDl1Hubw9Vw_qs4P-Up_-DwH-s_L6DEStmzmuL4IJvobVxlR1Zg/exec";
+// Your Web App URL
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby6YnM7nA_SD6Nq9A6fLeEdd5nrrk4MVuhQSn16lj1qgFF4LFYVpSB9gRGUu_diGhonMw/exec";
 
-// Auto-fill phone and fetch data
+// Auto-fill phone from login URL & fetch candidate data
 const urlParams = new URLSearchParams(window.location.search);
 const phoneFromLogin = urlParams.get("phone");
 if (phoneFromLogin) {
@@ -18,7 +17,7 @@ if (phoneFromLogin) {
   fetchCandidateData(phoneFromLogin);
 }
 
-// Show/hide extra fields
+// Show/hide extra fields based on experience
 experience.addEventListener("change", () => {
   if (experience.value === "Fresher" || experience.value === "") {
     extraFields.classList.add("hidden");
@@ -27,7 +26,7 @@ experience.addEventListener("change", () => {
   }
 });
 
-// Show/hide CV & skills
+// Show/hide CV & Skills based on interview type
 interviewType.addEventListener("change", () => {
   if (interviewType.value === "Sir") {
     skillsSection.style.display = "block";
@@ -38,18 +37,7 @@ interviewType.addEventListener("change", () => {
   }
 });
 
-// Display file size info
-document.getElementById("cv").addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-    fileSizeInfo.textContent = `File size: ${sizeMB} MB (Limit: 1 MB)`;
-    fileSizeInfo.style.color = file.size > 1024 * 1024 ? "red" : "green";
-  } else {
-    fileSizeInfo.textContent = "";
-  }
-});
-
+// Fetch candidate data from Main
 function fetchCandidateData(phone) {
   status.innerText = "🔍 Fetching your details...";
   fetch(`${WEB_APP_URL}?action=getCandidate&phone=${phone}`)
@@ -65,13 +53,19 @@ function fetchCandidateData(phone) {
         form.position.value = r["Position"] || "";
         form.experience.value = r["Experience"] || "";
         form.company.value = r["Company"] || "";
+        form.ctc.value = r["CTC"] || "";
         form.qualification.value = r["Qualification"] || "";
         form.skills.value = r["Skills"] || "";
         form.interviewType.value = r["Interview Type"] || "";
 
+        // Make auto-fetched fields read-only
         form.fullname.readOnly = true;
         form.contact.readOnly = true;
+        
+        
 
+
+        
         experience.dispatchEvent(new Event("change"));
         interviewType.dispatchEvent(new Event("change"));
 
@@ -92,7 +86,6 @@ function fetchCandidateData(phone) {
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const selectedType = interviewType.value;
-
   if (selectedType === "Sir") {
     const file = document.getElementById("cv").files[0];
     if (!file) {
@@ -101,11 +94,12 @@ form.addEventListener("submit", (e) => {
     }
 
     // ✅ Limit file size to 1 MB
-    const maxSize = 10 * 1024 * 1024;
-    if (file.size > maxSize) {
-      status.innerText = "⚠️ File size exceeds 1 MB limit. Please upload a smaller CV.";
-      return;
-    }
+const maxSize = 1 * 1024 * 1024;
+if (file.size > maxSize) {
+  status.innerText = "⚠️ File size exceeds 1 MB limit. Please upload a smaller CV.";
+  return;
+}
+
 
     const reader = new FileReader();
     reader.onload = e => sendData(e.target.result.split(",")[1], file.name);
@@ -123,17 +117,16 @@ function sendData(base64Data, filename) {
     contact: form.contact.value,
     email: form.email.value,
     currentAddress: form.currentAddress.value,
-    area: form.area.value,
     permanentAddress: form.permanentAddress.value,
     position: form.position.value,
     experience: form.experience.value,
     company: form.company.value,
+    ctc: form.ctc.value,
     skills: form.skills.value,
     qualification: form.qualification.value,
     cv_base64: base64Data,
     cv_filename: filename
   };
-
   status.innerText = "⏳ Submitting...";
   fetch(WEB_APP_URL, {
     method: "POST",
@@ -147,7 +140,6 @@ function sendData(base64Data, filename) {
       extraFields.classList.add("hidden");
       skillsSection.style.display = "block";
       cvSection.style.display = "block";
-      fileSizeInfo.textContent = "";
     })
     .catch(err => { status.innerText = "❌ Error: " + err.message; });
 }
