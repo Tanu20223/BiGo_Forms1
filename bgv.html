@@ -10,7 +10,7 @@
   <div class="form-container">
     <h2>BGV Form</h2>
     <form id="bgv">
-      
+
       <div class="form-group">
         <label for="name">Full Name</label>
         <input type="text" id="name" name="name" required>
@@ -96,6 +96,14 @@
         <input type="file" id="panBack" name="panBack">
       </div>
 
+      <!-- New Swastasathi Section -->
+      <div class="form-group">
+        <label for="swastasathiNo">Swastasathi No.</label>
+        <input type="text" id="swastasathiNo" name="swastasathiNo" required>
+        <label>Upload Swastasathi Photo</label>
+        <input type="file" id="swastasathiPhoto" name="swastasathiPhoto" required>
+      </div>
+
       <div class="form-group">
         <label for="selfie">Upload Your Selfie</label>
         <input type="file" id="selfie" name="selfie" required>
@@ -129,16 +137,6 @@
         <input type="text" id="position" name="position">
         <label for="joinDate">Previous Company Join Date</label>
         <input type="date" id="joinDate" name="joinDate">
-      </div>
-
-      <div class="form-group">
-        <label for="receipt">Upload Receipt Screenshot for BGV Refundable Fee (₹500)</label>
-        <input type="file" id="receipt" name="receipt" required>
-      </div>
-
-      <div class="form-group">
-        <label for="utrNo">Payment UTR No.</label>
-        <input type="text" id="utrNo" name="utrNo" required>
       </div>
 
       <button type="submit" class="btn-submit">Submit</button>
