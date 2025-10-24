@@ -7,7 +7,7 @@ const cvSection = document.getElementById("cvSection");
 const status = document.getElementById("status");
 
 // Your Web App URL
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby6YnM7nA_SD6Nq9A6fLeEdd5nrrk4MVuhQSn16lj1qgFF4LFYVpSB9gRGUu_diGhonMw/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyH8JTVCkjKXbofiEEItumb4vID5JENatELbB3YDMs4vENsrauJ_XUocJ-PFaMECFH35A/exec";
 
 // Auto-fill phone from login URL & fetch candidate data
 const urlParams = new URLSearchParams(window.location.search);
@@ -55,8 +55,9 @@ function fetchCandidateData(phone) {
         form.experience.value = r["Experience"] || "";
         form.company.value = r["Company"] || "";
         form.qualification.value = r["Qualification"] || "";
-        form.skills.value = r["Skills"] || "";
         form.interviewType.value = r["Interview Type"] || "";
+        form.skills.value = r["Skills"] || "";
+        
 
         // Make auto-fetched fields read-only
         form.fullname.readOnly = true;
@@ -112,7 +113,6 @@ if (file.size > maxSize) {
 function sendData(base64Data, filename) {
   const data = {
     formType: "interview",
-    interviewType: interviewType.value,
     fullname: form.fullname.value,
     contact: form.contact.value,
     email: form.email.value,
@@ -123,8 +123,8 @@ function sendData(base64Data, filename) {
     experience: form.experience.value,
     company: form.company.value,
     qualification: form.qualification.value,
-    skills: form.skills.value,
     interviewType: form.interviewType.value,
+    skills: form.skills.value,
     cv_base64: base64Data,
     cv_filename: filename
   };
@@ -144,6 +144,7 @@ function sendData(base64Data, filename) {
     })
     .catch(err => { status.innerText = "❌ Error: " + err.message; });
 }
+
 
 
 
