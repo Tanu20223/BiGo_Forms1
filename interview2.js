@@ -108,11 +108,11 @@ function sendData(base64Data, filename) {
     contact: form.contact.value,
     email: form.email.value,
     currentAddress: form.currentAddress.value,
+    area: form.area.value,
     permanentAddress: form.permanentAddress.value,
     position: form.position.value,
     experience: form.experience.value,
     company: form.company.value,
-    ctc: form.ctc.value,
     skills: form.skills.value,
     qualification: form.qualification.value,
     cv_base64: base64Data,
@@ -134,4 +134,5 @@ function sendData(base64Data, filename) {
     })
     .catch(err => { status.innerText = "❌ Error: " + err.message; });
 }
+
 
