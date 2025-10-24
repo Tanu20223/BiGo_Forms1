@@ -49,6 +49,7 @@ function fetchCandidateData(phone) {
         form.contact.value = r["Contact Number"] || phone;
         form.email.value = r["Email Address"] || "";
         form.currentAddress.value = r["Current Address"] || "";
+        form.area.value = r["Area"] || "";
         form.permanentAddress.value = r["Permanent Address"] || "";
         form.position.value = r["Position"] || "";
         form.experience.value = r["Experience"] || "";
@@ -116,6 +117,7 @@ function sendData(base64Data, filename) {
     contact: form.contact.value,
     email: form.email.value,
     currentAddress: form.currentAddress.value,
+    area: form.area.value,
     permanentAddress: form.permanentAddress.value,
     position: form.position.value,
     experience: form.experience.value,
@@ -141,4 +143,5 @@ function sendData(base64Data, filename) {
     })
     .catch(err => { status.innerText = "❌ Error: " + err.message; });
 }
+
 
