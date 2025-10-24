@@ -7,7 +7,7 @@ const cvSection = document.getElementById("cvSection");
 const status = document.getElementById("status");
 
 // Your Web App URL
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzDJ7F35oqBrLVZFPjG4NbNYqX-0LlFDWn-a3UjiUkRSWzj5CnD9Xa8QcOEANsJa6Xd2g/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyl2_jAkT3CTHxbOY1zDl1Hubw9Vw_qs4P-Up_-DwH-s_L6DEStmzmuL4IJvobVxlR1Zg/exec";
 
 // Auto-fill phone from login URL & fetch candidate data
 const urlParams = new URLSearchParams(window.location.search);
@@ -53,7 +53,6 @@ function fetchCandidateData(phone) {
         form.position.value = r["Position"] || "";
         form.experience.value = r["Experience"] || "";
         form.company.value = r["Company"] || "";
-        form.ctc.value = r["CTC"] || "";
         form.qualification.value = r["Qualification"] || "";
         form.skills.value = r["Skills"] || "";
         form.interviewType.value = r["Interview Type"] || "";
@@ -134,6 +133,7 @@ function sendData(base64Data, filename) {
     })
     .catch(err => { status.innerText = "❌ Error: " + err.message; });
 }
+
 
 
 
