@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Handover Form</title>
+<link rel="stylesheet" href="vehicle.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>Vehicle Handover Form</h2>
+  <form id="handoverForm">
+
+
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="representative">BiGo Representative Name</label>
+      <input type="text" id="representative" name="representative" required>
+    </div>
+    <div class="form-group">
+      <label for="handoverType">Type of Handover</label>
+      <select id="handoverType" name="handoverType" required>
+        <option value="">Select Handover Type</option>
+        <option value="new_client_vehicle">New Vehicle of Client</option>
+        <option value="new_rider_vehicle">New Vehicle of Rider</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="recipientType">Recipient Type</label>
+      <select id="recipientType" name="recipientType" required>
+        <option value="">Select Recipient Type</option>
+        <option value="client">Client</option>
+        <option value="rider">Rider</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="contact">Contact Number</label>
+      <input type="text" id="contact" name="contact" required>
+    </div>
+    <div class="form-group">
+      <label for="recipientEmail">Recipient Email</label>
+      <input type="email" id="recipientEmail" name="recipientEmail" required>
+    </div>
+
+    <div class="form-group">
+      <label for="aadharNumber">Aadhar Number</label>
+      <input type="text" id="aadharNumber" name="aadharNumber" required>
+      <label for="aadharPhoto">Upload Aadhar Photo</label>
+      <input type="file" id="aadharPhoto" name="aadharPhoto" required>
+    </div>
+
+    <div class="form-group">
+      <label for="panNumber">PAN Number</label>
+      <input type="text" id="panNumber" name="panNumber" required>
+      <label for="panPhoto">Upload PAN Photo</label>
+      <input type="file" id="panPhoto" name="panPhoto" required>
+    </div>
+
+    <div class="form-group">
+      <label for="voterNumber">Voter Number</label>
+      <input type="text" id="voterNumber" name="voterNumber" required>
+      <label for="voterPhoto">Upload Voter Photo</label>
+      <input type="file" id="voterPhoto" name="voterPhoto" required>
+    </div>
+
+    <div class="form-group">
+      <label for="vehicleSpeed">Vehicle Type</label>
+      <select id="vehicleSpeed" name="vehicleSpeed" required>
+        <option value="">Select Speed Type</option>
+        <option value="high">High Speed</option>
+        <option value="low">Low Speed</option>
+      </select>
+    </div>
+    <div class="form-group" id="licenseGroup" style="display:none;">
+      <label for="drivingLicenseNumber">Driving License Number</label>
+      <input type="text" id="drivingLicenseNumber" name="drivingLicenseNumber">
+      <label for="drivingLicense">Upload Driving License</label>
+      <input type="file" id="drivingLicense" name="drivingLicense">
+    </div>
+
+    <div class="form-group">
+      <label for="regNumber">Vehicle Registration Number</label>
+      <input type="text" id="regNumber" name="regNumber" required>
+    </div>
+    <div class="form-group">
+      <label for="odometer">Current Odometer Reading</label>
+      <input type="text" id="odometer" name="odometer" required>
+    </div>
+    <div class="form-group">
+      <label for="odometerPhoto">Upload Odometer Photo</label>
+      <input type="file" id="odometerPhoto" name="odometerPhoto" required>
+    </div>
+
+    <h3>Witness Details</h3>
+    <div class="form-group">
+      <label for="witnessName">Name of Witness</label>
+      <input type="text" id="witnessName" name="witnessName" required>
+    </div>
+    <div class="form-group">
+      <label for="witnessRelation">Relation with Rider</label>
+      <input type="text" id="witnessRelation" name="witnessRelation" required>
+    </div>
+    <div class="form-group">
+      <label for="witnessPhone">Witness Phone Number</label>
+      <input type="tel" id="witnessPhone" name="witnessPhone" required>
+    </div>
+    <div class="form-group">
+      <label for="witnessDOB">Witness Date of Birth</label>
+      <input type="date" id="witnessDOB" name="witnessDOB" required>
+    </div>
+    <div class="form-group">
+      <label for="relationProof">Upload Relation Proof</label>
+      <input type="file" id="relationProof" name="relationProof" required>
+    </div>
+    <div class="form-group">
+      <label for="witnessAadharPhoto">Upload Witness Aadhar Photo</label>
+      <input type="file" id="witnessAadharPhoto" name="witnessAadharPhoto" required>
+    </div>
+
+    <h3>Accessories</h3>
+    <div class="form-group">
+      <label for="helmetQuantity">Helmet</label>
+      <select id="helmetQuantity" name="helmetQuantity">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="tshirtQuantity">T-Shirt</label>
+      <select id="tshirtQuantity" name="tshirtQuantity">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="raincoatQuantity">Raincoat</label>
+      <select id="raincoatQuantity" name="raincoatQuantity">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+    </div>
+
+    <h3>Payment Details</h3>
+    <div class="form-group">
+      <label for="paymentScreenshot">Upload Payment Screenshot</label>
+      <input type="file" id="paymentScreenshot" name="paymentScreenshot" required>
+    </div>
+
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="successMessage" style="color:green; margin-top:10px;"></p>
+</div>
+
+<script src="vehicle.js"></script>
+</body>
+</html>
