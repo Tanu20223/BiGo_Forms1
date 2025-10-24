@@ -102,7 +102,7 @@ form.addEventListener('submit', e => {
 
         // 5. Send to Google
         // Use your correct, active deployment URL
-        return fetch('https://script.google.com/macros/s/AKfycbxRMu2JJRj-l3MIgSEbQWQ5DW_9n5WsswKkjxi0Ksi-HJ4S8KCfk5KUqGv8FEI98Q_nRQ/exec', {
+        return fetch('https://script.google.com/macros/s/AKfycbwob-jQ-uNJ1bn_C0pkT1Q3QP6MhcSzo1GQAX_17Mz0UFx_Nc-euCvQbr9XjJjqzmKTQQ/exec', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: { 'Content-Type': 'text/plain' }
