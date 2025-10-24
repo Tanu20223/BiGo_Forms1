@@ -7,7 +7,7 @@ const cvSection = document.getElementById("cvSection");
 const status = document.getElementById("status");
 
 // Your Web App URL
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby6YnM7nA_SD6Nq9A6fLeEdd5nrrk4MVuhQSn16lj1qgFF4LFYVpSB9gRGUu_diGhonMw/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzDJ7F35oqBrLVZFPjG4NbNYqX-0LlFDWn-a3UjiUkRSWzj5CnD9Xa8QcOEANsJa6Xd2g/exec";
 
 // Auto-fill phone from login URL & fetch candidate data
 const urlParams = new URLSearchParams(window.location.search);
@@ -134,5 +134,6 @@ function sendData(base64Data, filename) {
     })
     .catch(err => { status.innerText = "❌ Error: " + err.message; });
 }
+
 
 
