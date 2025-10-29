@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Candidate Interview Form</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="form-container">
+    <h2>Candidate Interview Form</h2>
+
+    <form id="interviewForm">
+      <label for="fullname">Full Name</label>
+      <input id="fullname" name="fullname" type="text" required maxlength="50" />
+
+      <label for="contact">Contact Number</label>
+      <input id="contact" name="contact" type="tel" required />
+      <input type="hidden" id="phoneFromLogin" name="phoneFromLogin">
+
+      <label for="email">Email Address (Optional)</label>
+      <input id="email" name="email" type="email" maxlength="50" /> 
+
+      <label for="currentAddress">Current Address</label>
+      <input id="currentAddress" name="currentAddress" type="text" required maxlength="50" />
+
+      <label for="area">Area</label>
+      <input id="area" name="area" type="text" required maxlength="50" />
+
+      <label for="permanentAddress">Permanent Address</label>
+      <input id="permanentAddress" name="permanentAddress" type="text" maxlength="50" />
+
+      <label for="position">Position Applied For</label>
+      <input id="position" name="position" type="text" required maxlength="50" />
+
+      <label for="experience">Total Years of Experience</label>
+      <select id="experience" name="experience" required>
+        <option value="">--Select--</option>
+        <option value="Fresher">Fresher</option>
+        <option value="0-1">0–1 Years</option>
+        <option value="2-5">2–5 Years</option>
+        <option value="6-10">6–10 Years</option>
+        <option value="10+">10+ Years</option>
+      </select>
+
+      <div id="extraFields" class="hidden">
+        <label for="company">Previous Company Name</label>
+        <input id="company" name="company" type="text" maxlength="50" />
+      </div>
+
+      <label for="qualification">Highest Qualification</label>
+      <input id="qualification" name="qualification" type="text" maxlength="50" />
+
+      <label for="interviewType">Interview Type</label>
+      <select id="interviewType" name="interviewType" required>
+        <option value="">--Select--</option>
+        <option value="Sir">Interview with Sir</option>
+        <option value="Rider">Rider Interview</option>
+        <option value="Rental">Rental Interview</option>
+      </select>
+      
+      <div id="riderFields" class="hidden">
+        <label for="drivingYears">How many years you are driving</label>
+        <select id="drivingYears" name="drivingYears" required> 
+          <option value="">--Select Years--</option>
+          </select>
+        
+        <label for="licenseDate">Driving license issue date</label>
+        <input id="licenseDate" name="licenseDate" type="date" required /> 
+      </div>
+      <div id="skillsSection">
+        <label for="skills">Key Skills</label>
+        <textarea id="skills" name="skills" rows="3"></textarea>
+      </div>
+
+      <div id="cvSection">
+        <label for="cv">Upload CV (PDF/DOC)</label>
+        <input id="cv" name="cv" type="file" accept=".pdf,.doc,.docx" />
+      </div>
+
+      <button type="submit" class="btn-submit">Submit</button>
+      <p id="status"></p>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
