@@ -4,34 +4,34 @@ const status = document.getElementById("status");
 // JSONP function
 function jsonpRequest(url) {
   return new Promise((resolve, reject) => {
-    const callbackName = 'callback_' + Date.now();
-    
-    window[callbackName] = function(data) {
+    const callbackName = "callback_" + Date.now();
+
+    window[callbackName] = function (data) {
       delete window[callbackName];
       if (script.parentNode) {
         script.parentNode.removeChild(script);
       }
       resolve(data);
     };
-    
-    const script = document.createElement('script');
-    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + callbackName;
-    
-    script.onerror = function() {
+
+    const script = document.createElement("script");
+    script.src = url + (url.includes("?") ? "&" : "?") + "callback=" + callbackName;
+
+    script.onerror = function () {
       delete window[callbackName];
       if (script.parentNode) {
         script.parentNode.removeChild(script);
       }
-      reject(new Error('JSONP failed'));
+      reject(new Error("JSONP failed"));
     };
-    
+
     document.head.appendChild(script);
-    
+
     setTimeout(() => {
       if (script.parentNode) {
         script.parentNode.removeChild(script);
         delete window[callbackName];
-        reject(new Error('JSONP timeout'));
+        reject(new Error("JSONP timeout"));
       }
     }, 10000);
   });
@@ -50,62 +50,74 @@ form.addEventListener("submit", async (e) => {
   status.innerText = "Checking...";
   status.style.color = "blue";
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz7yYdOWsFcaBqUjwJ3RiQa6DG929t6ZmUy72_WtWgyf64DJlny5-LtiV2Lo3i1aVIxHg/exec";
+  const WEB_APP_URL =
+    "https://script.google.com/macros/s/AKfycbz7yYdOWsFcaBqUjwJ3RiQa6DG929t6ZmUy72_WtWgyf64DJlny5-LtiV2Lo3i1aVIxHg/exec";
 
   try {
-    const url = ${WEB_APP_URL}?action=getDetails&phone=${phone}&t=${Date.now()};
+    // FIXED: correct template literal
+    const url = `${WEB_APP_URL}?action=getDetails&phone=${phone}&t=${Date.now()}`;
     console.log("Request URL:", url);
-    
+
     let result;
-    
+
     // Try JSONP first
     try {
       result = await jsonpRequest(url);
       console.log("JSONP Success:", result);
     } catch (jsonpError) {
       console.log("JSONP failed, trying fetch:", jsonpError.message);
+
       // Try regular fetch
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(HTTP error! status: ${response.status});
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
       const responseText = await response.text();
       console.log("Fetch Response Text:", responseText);
-      
+
       try {
         result = JSON.parse(responseText);
       } catch (parseError) {
-        throw new Error(Invalid JSON response: ${responseText});
+        throw new Error(`Invalid JSON response: ${responseText}`);
       }
     }
 
     if (result.status === "found") {
       const data = result.data;
-      
-      // Use the values directly from the indexed columns
+
       const mainStatus = (data.status || "").toLowerCase().trim();
       const verificationStatus = (data.verification || "").toLowerCase().trim();
-      const groundVerificationStatus = (data.groundVerification || "").toLowerCase().trim();
+      const groundVerificationStatus = (data.groundVerification || "")
+        .toLowerCase()
+        .trim();
 
       console.log("Status Analysis:", {
         mainStatus,
-        verificationStatus, 
-        groundVerificationStatus
+        verificationStatus,
+        groundVerificationStatus,
       });
 
-      // Decision logic using AND conditions
-      if (mainStatus === "all done" && verificationStatus === "done" && groundVerificationStatus === "done") {
+      // Redirect Logic
+      if (
+        mainStatus === "all done" &&
+        verificationStatus === "done" &&
+        groundVerificationStatus === "done"
+      ) {
         console.log("All conditions met → vehicle.html");
-        window.location.href = vehicle.html?phone=${encodeURIComponent(phone)};
-      } else if (mainStatus === "all done" && verificationStatus === "done") {
+        window.location.href = `vehicle.html?phone=${encodeURIComponent(phone)}`;
+      } else if (
+        mainStatus === "all done" &&
+        verificationStatus === "done"
+      ) {
         console.log("First two conditions met → onground.html");
-        window.location.href = onground.html?phone=${encodeURIComponent(phone)};
+        window.location.href = `onground.html?phone=${encodeURIComponent(phone)}`;
       } else if (mainStatus === "all done") {
         console.log("Only status condition met → followup2.html");
-        window.location.href = followup2.html?phone=${encodeURIComponent(phone)};
+        window.location.href = `followup2.html?phone=${encodeURIComponent(phone)}`;
       } else {
         console.log("No conditions met → interview.html");
-        window.location.href = interview.html?phone=${encodeURIComponent(phone)};
+        window.location.href = `interview.html?phone=${encodeURIComponent(phone)}`;
       }
     } else if (result.status === "not_found") {
       status.innerText = "❌ Phone number not found. Please check the number.";
@@ -114,19 +126,16 @@ form.addEventListener("submit", async (e) => {
       status.innerText = "❌ Error: " + (result.message || "Unknown error");
       status.style.color = "red";
     }
-
   } catch (err) {
     console.error("Final Error:", err);
     status.innerHTML = `
       ❌ Error: ${err.message}
       <br><br>
       <strong>Please try:</strong>
-      <br>• Checking the phone number
-      <br>• Refreshing the page
-      <br>• Contacting support if problem continues
+      <br>• Check the phone number
+      <br>• Refresh the page
+      <br>• Contact support if problem continues
     `;
     status.style.color = "red";
   }
 });
-
-
