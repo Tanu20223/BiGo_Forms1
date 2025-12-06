@@ -50,7 +50,7 @@ form.addEventListener("submit", async (e) => {
   status.innerText = "Checking...";
   status.style.color = "blue";
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyauFFyvRZYDVa_M3_KTind9MypEzlulXpzQIAfyRnj6tgsso8iorSGWIunT5zmeJpMTA/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyMay1aDZSf8aZc16kthdw4jRjL4e4YJ3aFSYIo32cdc80cebGP6IRSvMj4k9aaCOWp8Q/exec";
 
   try {
     const url = ${WEB_APP_URL}?action=getDetails&phone=${phone}&t=${Date.now()};
@@ -129,6 +129,7 @@ form.addEventListener("submit", async (e) => {
     status.style.color = "red";
   }
 });
+
 
 
 
