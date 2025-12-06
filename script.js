@@ -50,7 +50,7 @@ form.addEventListener("submit", async (e) => {
   status.innerText = "Checking...";
   status.style.color = "blue";
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzvfM2ifKjmliFZA6ExBpacmgONoFOSibDKatMssT_V3oabWmSiiHLNxYJgsU9JuEkrfQ/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyauFFyvRZYDVa_M3_KTind9MypEzlulXpzQIAfyRnj6tgsso8iorSGWIunT5zmeJpMTA/exec";
 
   try {
     const url = `${WEB_APP_URL}?action=lookup&sheet=Rider&mobile=${phone}&t=${Date.now()}`;
@@ -129,6 +129,7 @@ form.addEventListener("submit", async (e) => {
     status.style.color = "red";
   }
 });
+
 
 
 
