@@ -49,7 +49,7 @@ form.addEventListener("submit", async (e) => {
   status.style.color = "blue";
 
   const WEB_APP_URL =
-    "https://script.google.com/macros/s/AKfycbxWmLMqwNRgfoKcAvaUYUFrNLVRV5jLawdWZOEcwXm4j7tce8BXj_5BoGnr-YgFNaOg7A/exec";
+    "https://script.google.com/macros/s/AKfycbxj8p1GTdQPQyiNdQNhS2XNIaaShyK6TW94ONZV_KU3GeW7y8DiT4Jcw401X1d_97O-7A/exec";
 
   try {
     const url = `${WEB_APP_URL}?action=getDetails&phone=${phone}&t=${Date.now()}`;
@@ -135,3 +135,4 @@ form.addEventListener("submit", async (e) => {
     status.style.color = "red";
   }
 });
+
