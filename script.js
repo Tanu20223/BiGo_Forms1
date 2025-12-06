@@ -86,7 +86,7 @@ form.addEventListener("submit", async (e) => {
     if (result.status === "found") {
       const data = result.data;
 
-      const mainStatus = (data.status || "").toLowerCase().trim();
+      const mainStatus = (data.status2 || "").toLowerCase().trim();
       const verificationStatus = (data.verification || "").toLowerCase().trim();
       const groundVerificationStatus = (data.groundVerification || "")
         .toLowerCase()
@@ -139,6 +139,7 @@ form.addEventListener("submit", async (e) => {
     status.style.color = "red";
   }
 });
+
 
 
 
