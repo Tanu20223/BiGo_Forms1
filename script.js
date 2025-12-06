@@ -55,7 +55,6 @@ form.addEventListener("submit", async (e) => {
   try {
     const url = ${WEB_APP_URL}?action=getDetails&phone=${phone}&t=${Date.now()};
     console.log("Request URL:", url);
-
     
     let result;
     
@@ -68,7 +67,7 @@ form.addEventListener("submit", async (e) => {
       // Try regular fetch
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(HTTP error! status: ${response.status});
       }
       const responseText = await response.text();
       console.log("Fetch Response Text:", responseText);
@@ -76,7 +75,7 @@ form.addEventListener("submit", async (e) => {
       try {
         result = JSON.parse(responseText);
       } catch (parseError) {
-        throw new Error(`Invalid JSON response: ${responseText}`);
+        throw new Error(Invalid JSON response: ${responseText});
       }
     }
 
@@ -97,16 +96,16 @@ form.addEventListener("submit", async (e) => {
       // Decision logic using AND conditions
       if (mainStatus === "all done" && verificationStatus === "done" && groundVerificationStatus === "done") {
         console.log("All conditions met → vehicle.html");
-        window.location.href = `vehicle.html?phone=${encodeURIComponent(phone)}`;
+        window.location.href = vehicle.html?phone=${encodeURIComponent(phone)};
       } else if (mainStatus === "all done" && verificationStatus === "done") {
         console.log("First two conditions met → onground.html");
-        window.location.href = `onground.html?phone=${encodeURIComponent(phone)}`;
+        window.location.href = onground.html?phone=${encodeURIComponent(phone)};
       } else if (mainStatus === "all done") {
         console.log("Only status condition met → followup2.html");
-        window.location.href = `followup2.html?phone=${encodeURIComponent(phone)}`;
+        window.location.href = followup2.html?phone=${encodeURIComponent(phone)};
       } else {
         console.log("No conditions met → interview.html");
-        window.location.href = `interview.html?phone=${encodeURIComponent(phone)}`;
+        window.location.href = interview.html?phone=${encodeURIComponent(phone)};
       }
     } else if (result.status === "not_found") {
       status.innerText = "❌ Phone number not found. Please check the number.";
@@ -129,10 +128,3 @@ form.addEventListener("submit", async (e) => {
     status.style.color = "red";
   }
 });
-
-
-
-
-
-
-
