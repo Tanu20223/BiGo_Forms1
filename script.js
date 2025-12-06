@@ -8,9 +8,7 @@ function jsonpRequest(url) {
 
     window[callbackName] = function (data) {
       delete window[callbackName];
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
+      if (script.parentNode) script.parentNode.removeChild(script);
       resolve(data);
     };
 
@@ -19,9 +17,7 @@ function jsonpRequest(url) {
 
     script.onerror = function () {
       delete window[callbackName];
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
+      if (script.parentNode) script.parentNode.removeChild(script);
       reject(new Error("JSONP failed"));
     };
 
@@ -39,8 +35,10 @@ function jsonpRequest(url) {
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const phone = form.phone.value.trim();
 
+  // phone validation
   if (!phone || !/^\d{10}$/.test(phone)) {
     status.innerText = "❌ Please enter a valid 10-digit phone number";
     status.style.color = "red";
@@ -54,78 +52,77 @@ form.addEventListener("submit", async (e) => {
     "https://script.google.com/macros/s/AKfycbxWmLMqwNRgfoKcAvaUYUFrNLVRV5jLawdWZOEcwXm4j7tce8BXj_5BoGnr-YgFNaOg7A/exec";
 
   try {
-    // FIXED: correct template literal
     const url = `${WEB_APP_URL}?action=getDetails&phone=${phone}&t=${Date.now()}`;
     console.log("Request URL:", url);
 
     let result;
 
-    // Try JSONP first
+    // Try JSONP
     try {
       result = await jsonpRequest(url);
-      console.log("JSONP Success:", result);
-    } catch (jsonpError) {
-      console.log("JSONP failed, trying fetch:", jsonpError.message);
+      console.log("JSONP result:", result);
+    } catch (e1) {
+      console.log("JSONP failed → fallback to fetch");
 
-      // Try regular fetch
       const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const responseText = await response.text();
-      console.log("Fetch Response Text:", responseText);
+      const text = await response.text();
 
       try {
-        result = JSON.parse(responseText);
-      } catch (parseError) {
-        throw new Error(`Invalid JSON response: ${responseText}`);
+        result = JSON.parse(text);
+      } catch (e2) {
+        throw new Error("Invalid JSON from server: " + text);
       }
     }
 
+    // PROCESS API RESULT
     if (result.status === "found") {
       const data = result.data;
 
+      console.log("Returned Data:", data);
+
+      // FIXED: Correct fields
       const mainStatus = (data.status2 || "").toLowerCase().trim();
       const verificationStatus = (data.verification || "").toLowerCase().trim();
       const groundVerificationStatus = (data.groundVerification || "")
         .toLowerCase()
         .trim();
 
-      console.log("Status Analysis:", {
+      console.log("Processed Status:", {
         mainStatus,
         verificationStatus,
         groundVerificationStatus,
       });
 
-      // Redirect Logic
+      // FINAL REDIRECT LOGIC
       if (
         mainStatus === "all done" &&
         verificationStatus === "done" &&
         groundVerificationStatus === "done"
       ) {
-        console.log("All conditions met → vehicle.html");
-        window.location.href = `vehicle.html?phone=${encodeURIComponent(phone)}`;
+        window.location.href = `vehicle.html?phone=${phone}`;
       } else if (
         mainStatus === "all done" &&
         verificationStatus === "done"
       ) {
-        console.log("First two conditions met → onground.html");
-        window.location.href = `onground.html?phone=${encodeURIComponent(phone)}`;
+        window.location.href = `onground.html?phone=${phone}`;
       } else if (mainStatus === "all done") {
-        console.log("Only status condition met → followup2.html");
-        window.location.href = `followup2.html?phone=${encodeURIComponent(phone)}`;
+        window.location.href = `followup2.html?phone=${phone}`;
       } else {
-        console.log("No conditions met → interview.html");
-        window.location.href = `interview.html?phone=${encodeURIComponent(phone)}`;
+        window.location.href = `interview.html?phone=${phone}`;
       }
-    } else if (result.status === "not_found") {
-      status.innerText = "❌ Phone number not found. Please check the number.";
-      status.style.color = "red";
-    } else {
-      status.innerText = "❌ Error: " + (result.message || "Unknown error");
-      status.style.color = "red";
+
+      return;
     }
+
+    if (result.status === "not_found") {
+      status.innerText = "ℹ️ No existing record found. Please fill the form.";
+      status.style.color = "orange";
+      return;
+    }
+
+    // Any unknown error message
+    status.innerText = "❌ Error: " + (result.message || "Unknown server error");
+    status.style.color = "red";
   } catch (err) {
     console.error("Final Error:", err);
     status.innerHTML = `
@@ -134,12 +131,7 @@ form.addEventListener("submit", async (e) => {
       <strong>Please try:</strong>
       <br>• Check the phone number
       <br>• Refresh the page
-      <br>• Contact support if problem continues
     `;
     status.style.color = "red";
   }
 });
-
-
-
-
