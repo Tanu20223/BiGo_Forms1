@@ -51,7 +51,7 @@ form.addEventListener("submit", async (e) => {
   status.style.color = "blue";
 
   const WEB_APP_URL =
-    "https://script.google.com/macros/s/AKfycbzaSRyfnqV7OUuz7k8E7uN9rbk4RlZ_qfB7yoR_HRbUNgTr3vkoOQtAFc8FfsRmZZATnA/exec";
+    "https://script.google.com/macros/s/AKfycbxWmLMqwNRgfoKcAvaUYUFrNLVRV5jLawdWZOEcwXm4j7tce8BXj_5BoGnr-YgFNaOg7A/exec";
 
   try {
     // FIXED: correct template literal
@@ -139,5 +139,6 @@ form.addEventListener("submit", async (e) => {
     status.style.color = "red";
   }
 });
+
 
 
