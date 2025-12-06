@@ -53,8 +53,9 @@ form.addEventListener("submit", async (e) => {
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzvfM2ifKjmliFZA6ExBpacmgONoFOSibDKatMssT_V3oabWmSiiHLNxYJgsU9JuEkrfQ/exec";
 
   try {
-    const url = `${WEB_APP_URL}?action=getDetails&phone=${phone}&t=${Date.now()}`;
+    const url = `${WEB_APP_URL}?action=lookup&sheet=Rider&mobile=${phone}&t=${Date.now()}`;
     console.log("Request URL:", url);
+
     
     let result;
     
@@ -128,6 +129,7 @@ form.addEventListener("submit", async (e) => {
     status.style.color = "red";
   }
 });
+
 
 
 
