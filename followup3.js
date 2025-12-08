@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyyXMZnm1cXJI2mflitlRsC_VW7SaQtW4HWgi8UIoOIRu2K7qSNCc0D5-1jb4mJ3r4eBw/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxIM9K7bfq3FUn-Iovpcw6_ShVBgU-UlaokoUfT6DODSgtB-MaP6tnFGzyPghLKAsETMg/exec";
   const urlParams = new URLSearchParams(window.location.search);
   const phoneFromLogin = urlParams.get("phone");
 
@@ -99,5 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
