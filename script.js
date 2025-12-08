@@ -96,13 +96,13 @@ form.addEventListener("submit", async (e) => {
       // FINAL REDIRECT LOGIC
       if (
         mainStatus === "all done" &&
-        verificationStatus === "yes" &&
+        verificationStatus === "done" &&
         groundVerificationStatus === "done"
       ) {
         window.location.href = `vehicle.html?phone=${phone}`;
       } else if (
         mainStatus === "all done" &&
-        verificationStatus === "yes"
+        verificationStatus === "done"
       ) {
         window.location.href = `onground.html?phone=${phone}`;
       } else if (mainStatus === "all done") {
@@ -135,6 +135,7 @@ form.addEventListener("submit", async (e) => {
     status.style.color = "red";
   }
 });
+
 
 
 
