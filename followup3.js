@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const count = finalRemark.value.length;
     remarkCount.textContent = `${count} / 50`;
 
-    // Optional: change color when near limit
     if (count >= 45) {
       remarkCount.style.color = "red";
     } else {
@@ -70,7 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
       finalRemark: form.finalRemark.value.trim()
     };
 
-    fetch(WEB_APP_URL, {
+    // IMPORTANT FIX → ADD ACTION & PHONE IN URL
+    fetch(`${WEB_APP_URL}?action=submitFollowup&phone=${encodeURIComponent(phoneFromLogin)}`, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
       body: JSON.stringify(data)
@@ -99,9 +99,3 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
-
-
-
-
-
-
