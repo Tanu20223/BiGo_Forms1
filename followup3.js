@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzqSS89j6wMAI6PYHzWROkIjfvK9ErS4YZgOCP3ZDF31Py1aZ3qnQYZoIbjhaDtOS1cXA/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz3v0EJfe0rK_xwq_yIloZ2M8cvDFlhyjZ759abEulcCEAJ0L2k8Q9Mubj6M1i1kYASlQ/exec";
   const urlParams = new URLSearchParams(window.location.search);
   const phoneFromLogin = urlParams.get("phone");
 
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ====== FETCH CANDIDATE DATA ======
-  fetch(`${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)}`)
+  fetch(${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)})
     .then(res => res.json())
     .then(data => {
       console.log("GET response:", data);
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   finalRemark.addEventListener("input", () => {
     const count = finalRemark.value.length;
-    remarkCount.textContent = `${count} / 50`;
+    remarkCount.textContent = ${count} / 50;
 
     // Optional: change color when near limit
     if (count >= 45) {
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
           status.innerText = "✅ Follow-up submitted successfully!";
 
           if ((data.selection || "").toLowerCase() === "yes") {
-            window.location.href = `bgv.html?phone=${encodeURIComponent(phoneFromLogin)}`;
+            window.location.href = bgv.html?phone=${encodeURIComponent(phoneFromLogin)};
           } else {
             form.reset();
             remarkCount.textContent = "0 / 50";
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
