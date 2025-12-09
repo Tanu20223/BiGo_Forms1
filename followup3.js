@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby4y6eavXOH-NP2TV2ZPlaC1UrwK7WRsZzSbTlXkgtH2cdjhkpuebZECZZq42FUUAUY/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzTkAZdt_dAjIMl8QxLdYMr_82-ZU5YHrypbP1GAY692Ffg8_kaeldH5F6pcxZomZ6h0A/exec";
   const urlParams = new URLSearchParams(window.location.search);
   const phoneFromLogin = urlParams.get("phone");
 
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ====== FETCH CANDIDATE DATA ======
-  fetch(${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)})
+  fetch(`${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)}`)
     .then(res => res.json())
     .then(data => {
       console.log("GET response:", data);
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
           status.innerText = "✅ Follow-up submitted successfully!";
 
           if ((data.selection || "").toLowerCase() === "yes") {
-            window.location.href = bgv.html?phone=${encodeURIComponent(phoneFromLogin)};
+            window.location.href = `bgv.html?phone=${encodeURIComponent(phoneFromLogin)}`;
           } else {
             form.reset();
             remarkCount.textContent = "0 / 50";
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
