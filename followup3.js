@@ -73,11 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
       action: "followup"
     };
 
-    fetch(`${WEB_APP_URL}?action=lookup&phone=${encodeURIComponent(phoneFromLogin)}`, {
+    fetch(WEB_APP_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
       body: JSON.stringify(data)
     })
+
       .then(res => res.json())
       .then(result => {
         console.log("POST response:", result);
@@ -105,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
