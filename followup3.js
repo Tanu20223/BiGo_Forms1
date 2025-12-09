@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz3v0EJfe0rK_xwq_yIloZ2M8cvDFlhyjZ759abEulcCEAJ0L2k8Q9Mubj6M1i1kYASlQ/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby4y6eavXOH-NP2TV2ZPlaC1UrwK7WRsZzSbTlXkgtH2cdjhkpuebZECZZq42FUUAUY/exec";
   const urlParams = new URLSearchParams(window.location.search);
   const phoneFromLogin = urlParams.get("phone");
 
@@ -100,6 +100,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
-
-
+this is the followup aps script code
