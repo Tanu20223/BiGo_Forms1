@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
       action: "submitFollowup"
     };
 
-    fetch(WEB_APP_URL, {
+    fetch(`${WEB_APP_URL}?action=submitFollowup&phone=${encodeURIComponent(phoneFromLogin)}`, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
       body: JSON.stringify(data)
@@ -105,4 +105,5 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
