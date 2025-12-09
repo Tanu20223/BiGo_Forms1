@@ -1,9 +1,8 @@
-document.addEventListener("DOMContentLoaded", () => { 
+document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyhIkoLzslB6QfzMsM2xhbqEZyYEniUcyARt7_s6TGTCareeO1IuDTMUa8f5IUBbnci7w/exec";
-
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzqSS89j6wMAI6PYHzWROkIjfvK9ErS4YZgOCP3ZDF31Py1aZ3qnQYZoIbjhaDtOS1cXA/exec";
   const urlParams = new URLSearchParams(window.location.search);
   const phoneFromLogin = urlParams.get("phone");
 
@@ -13,14 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // =============================
-  // FETCH CANDIDATE DETAILS
-  // =============================
-  fetch(`${WEB_APP_URL}?action=lookup&phone=${encodeURIComponent(phoneFromLogin)}`)
+  // ====== FETCH CANDIDATE DATA ======
+  fetch(${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)})
     .then(res => res.json())
     .then(data => {
       console.log("GET response:", data);
-
       if (data.success) {
         const r = data.record || {};
         form.fullname.value = r["Full Name"] || "";
@@ -36,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         status.innerText = "✅ Candidate data loaded successfully.";
       } else {
-        status.innerText = "⚠️ " + (data.message || "Record not found");
+        status.innerText = "⚠ " + (data.message || "Record not found");
       }
     })
     .catch(err => {
@@ -44,21 +40,23 @@ document.addEventListener("DOMContentLoaded", () => {
       status.innerText = "❌ Error fetching candidate data.";
     });
 
-  // =============================
-  // FINAL REMARK LIMIT COUNTER
-  // =============================
+  // ====== FINAL REMARK CHARACTER LIMIT ======
   const finalRemark = document.getElementById("finalRemark");
   const remarkCount = document.getElementById("remarkCount");
 
   finalRemark.addEventListener("input", () => {
     const count = finalRemark.value.length;
-    remarkCount.textContent = `${count} / 50`;
-    remarkCount.style.color = count >= 45 ? "red" : "gray";
+    remarkCount.textContent = ${count} / 50;
+
+    // Optional: change color when near limit
+    if (count >= 45) {
+      remarkCount.style.color = "red";
+    } else {
+      remarkCount.style.color = "gray";
+    }
   });
 
-  // =============================
-  // SUBMIT FOLLOW-UP
-  // =============================
+  // ====== SUBMIT FOLLOW-UP ======
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     status.innerText = "⏳ Submitting follow-up data...";
@@ -69,8 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
       trainingBy: form.trainingBy.value.trim(),
       trainingStatus: form.trainingStatus.value.trim(),
       selection: form.selection.value.trim(),
-      finalRemark: form.finalRemark.value.trim(),
-      action: "followup"
+      finalRemark: form.finalRemark.value.trim()
     };
 
     fetch(WEB_APP_URL, {
@@ -78,26 +75,22 @@ document.addEventListener("DOMContentLoaded", () => {
       headers: { "Content-Type": "text/plain" },
       body: JSON.stringify(data)
     })
-
       .then(res => res.json())
       .then(result => {
         console.log("POST response:", result);
-
         if (result.success) {
           status.innerText = "✅ Follow-up submitted successfully!";
 
-          // Redirect to BGV if selected Yes
           if ((data.selection || "").toLowerCase() === "yes") {
-            window.location.href = `bgv.html?phone=${encodeURIComponent(phoneFromLogin)}`;
+            window.location.href = bgv.html?phone=${encodeURIComponent(phoneFromLogin)};
           } else {
-            // Reset form for No
             form.reset();
             remarkCount.textContent = "0 / 50";
             remarkCount.style.color = "gray";
           }
 
         } else {
-          status.innerText = "⚠️ Submission failed: " + (result.message || "Unknown error");
+          status.innerText = "⚠ Submission failed: " + (result.message || "Unknown error");
         }
       })
       .catch(err => {
@@ -106,10 +99,3 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
-
-
-
-
-
-
-
