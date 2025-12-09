@@ -70,10 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
       trainingStatus: form.trainingStatus.value.trim(),
       selection: form.selection.value.trim(),
       finalRemark: form.finalRemark.value.trim(),
-      action: "submitFollowup"
+      action: "followup"
     };
 
-    fetch(`${WEB_APP_URL}?action=submitFollowup&phone=${encodeURIComponent(phoneFromLogin)}`, {
+    fetch(`${WEB_APP_URL}?action=lookup&phone=${encodeURIComponent(phoneFromLogin)}`, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
       body: JSON.stringify(data)
@@ -105,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
