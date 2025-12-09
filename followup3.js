@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =============================
   // FETCH CANDIDATE DETAILS
   // =============================
-  fetch(`${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)}`)
+  fetch(`${WEB_APP_URL}?action=lookup&phone=${encodeURIComponent(phoneFromLogin)}`)
     .then(res => res.json())
     .then(data => {
       console.log("GET response:", data);
@@ -106,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
