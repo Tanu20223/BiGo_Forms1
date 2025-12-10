@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby4KjGL35BqQbyH58adxNMUXlIGoIPAzJRuMkYC_lRWfiYVPKARvQOl8j1GE6t2AvZ4iQ/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyd50ZDyDZs3afRr5pAgkxOeJ1pBPAPOphVUaO8Axnhg6xWQfTWYq7yJ5E9Khb1vxTKPA/exec";
   const urlParams = new URLSearchParams(window.location.search);
   const phoneFromLogin = urlParams.get("phone");
 
@@ -88,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
             remarkCount.textContent = "0 / 50";
             remarkCount.style.color = "gray";
           }
-
         } else {
           status.innerText = "⚠ Submission failed: " + (result.message || "Unknown error");
         }
@@ -99,6 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
