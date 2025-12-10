@@ -1,71 +1,101 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxgszLRWrFH7JRyMJ6tcO4NPG75cs22JVy_UGDdH8UhMkTKz1obOG4ES__pCLOHIPfNcw/exec";  // Replace only this
-
-  // Get phone from URL
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzPFSHaSoI7ABEiMEiDWIA4wGzrJrBudnm4dwN3eaF0-9C0y0YAgJK4fVJ46C1ASV2HUQ/exec";
   const urlParams = new URLSearchParams(window.location.search);
-  const phone = urlParams.get("phone");
+  const phoneFromLogin = urlParams.get("phone");
 
-  if (!phone) {
-    status.innerHTML = "❌ Phone missing in URL!";
+  if (!phoneFromLogin) {
+    alert("❌ Missing phone number in URL. Use ?phone=XXXXXXXXXX");
+    status.innerText = "❌ Missing phone number in URL.";
     return;
   }
 
-  // Lookup
-  fetch(`${WEB_APP_URL}?action=lookup&phone=${phone}`)
+  // ====== FETCH CANDIDATE DATA ======
+  fetch(${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)})
     .then(res => res.json())
     .then(data => {
-      if (!data.success) {
-        status.innerHTML = "❌ No data found for this phone!";
-        return;
+      console.log("GET response:", data);
+      if (data.success) {
+        const r = data.record || {};
+        form.fullname.value = r["Full Name"] || "";
+        form.contact.value = r["Contact Number"] || phoneFromLogin;
+        form.email.value = r["Email Address"] || "";
+        form.currentAddress.value = r["Current Address"] || "";
+        form.permanentAddress.value = r["Permanent Address"] || "";
+        form.position.value = r["Position Applied For"] || "";
+
+        form.fullname.readOnly = true;
+        form.contact.readOnly = true;
+        form.email.readOnly = true;
+
+        status.innerText = "✅ Candidate data loaded successfully.";
+      } else {
+        status.innerText = "⚠ " + (data.message || "Record not found");
       }
-
-      document.getElementById("fullname").value = data.fullname;
-      document.getElementById("contact").value = data.contact;
-      document.getElementById("email").value = data.email;
-
-      // Store phone to hidden field
-      document.getElementById("currentPhone").value = phone;
+    })
+    .catch(err => {
+      console.error("GET fetch error:", err);
+      status.innerText = "❌ Error fetching candidate data.";
     });
 
-  // Submit
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  // ====== FINAL REMARK CHARACTER LIMIT ======
+  const finalRemark = document.getElementById("finalRemark");
+  const remarkCount = document.getElementById("remarkCount");
 
-    const payload = {
-      action: "followup",
-      phone: document.getElementById("currentPhone").value.trim(),
-      fullname: document.getElementById("fullname").value.trim(),
-      contact: document.getElementById("contact").value.trim(),
-      email: document.getElementById("email").value.trim(),
-      trainingBy: document.getElementById("trainingBy").value.trim(),
-      trainingStatus: document.getElementById("trainingStatus").value.trim(),
-      selection: document.getElementById("selection").value.trim(),
-      finalRemark: document.getElementById("finalRemark").value.trim()
-    };
+  finalRemark.addEventListener("input", () => {
+    const count = finalRemark.value.length;
+    remarkCount.textContent = ${count} / 50;
 
-    const res = await fetch(WEB_APP_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    const out = await res.json();
-
-    if (!out.success) {
-      status.innerHTML = "❌ " + out.message;
-      return;
+    // Optional: change color when near limit
+    if (count >= 45) {
+      remarkCount.style.color = "red";
+    } else {
+      remarkCount.style.color = "gray";
     }
-
-    status.innerHTML = "✔ Saved! Redirecting...";
-
-    setTimeout(() => {
-      window.location.href = "bgv.html?phone=" + phone;
-    }, 500);
   });
 
-});
+  // ====== SUBMIT FOLLOW-UP ======
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    status.innerText = "⏳ Submitting follow-up data...";
 
+    const data = {
+      phone: phoneFromLogin,
+      interviewBy: form.interviewBy.value.trim(),
+      trainingBy: form.trainingBy.value.trim(),
+      trainingStatus: form.trainingStatus.value.trim(),
+      selection: form.selection.value.trim(),
+      finalRemark: form.finalRemark.value.trim()
+    };
+
+    fetch(WEB_APP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(result => {
+        console.log("POST response:", result);
+        if (result.success) {
+          status.innerText = "✅ Follow-up submitted successfully!";
+
+          if ((data.selection || "").toLowerCase() === "yes") {
+            window.location.href = bgv.html?phone=${encodeURIComponent(phoneFromLogin)};
+          } else {
+            form.reset();
+            remarkCount.textContent = "0 / 50";
+            remarkCount.style.color = "gray";
+          }
+
+        } else {
+          status.innerText = "⚠ Submission failed: " + (result.message || "Unknown error");
+        }
+      })
+      .catch(err => {
+        console.error("POST error:", err);
+        status.innerText = "❌ Error submitting follow-up data.";
+      });
+  });
+});
