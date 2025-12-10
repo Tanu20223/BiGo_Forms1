@@ -2,116 +2,81 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  // Your deployed Apps Script Web App URL
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw54eK_nkV2iEtcbC-q01IQLaSyV2y2s1UImHbuDn1m6giLigILkOo_h_jEmHM1qNys7g/exec";
+  // YOUR WEB APP URL
+  const WEB_APP_URL =
+    "https://script.google.com/macros/s/AKfycbw54eK_nkV2iEtcbC-q01IQLaSyV2y2s1UImHbuDn1m6giLigILkOo_h_jEmHM1qNys7g/exec";
 
-  // 1️⃣ GET PHONE FROM URL
+  // GET phone from URL
   const urlParams = new URLSearchParams(window.location.search);
   const phoneFromLogin = urlParams.get("phone");
 
-  if (!phoneFromLogin) {
-    status.textContent = "❌ Missing phone number in URL";
-    status.style.color = "red";
-    return;
-  }
-
   // Set hidden phone field
-  const phoneField = document.getElementById("phone");
-  if (phoneField) phoneField.value = phoneFromLogin;
+  document.getElementById("currentPhone").value = phoneFromLogin;
 
-  // 2️⃣ FETCH CANDIDATE DETAILS
-  fetch(`${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)}`)
+  // Load user data
+  fetch(`${WEB_APP_URL}?action=lookup&phone=${phoneFromLogin}`)
     .then((res) => res.json())
     .then((data) => {
-      console.log("GET response:", data);
-
-      if (!data.success) {
-        status.textContent = "❌ No data found for this phone!";
+      if (!data.success || !data.data) {
+        status.textContent = "No data found for this phone!";
         status.style.color = "red";
         return;
       }
 
-      const r = data.record || {};
-
-      // Fill form fields
-      form.fullname.value = r["Full Name"] || "";
-      form.contact.value = r["Contact Number"] || "";
-      form.email.value = r["Email Address"] || "";
-      form.currentAddress.value = r["Current Address"] || "";
-      form.permanentAddress.value = r["Permanent Address"] || "";
-      form.position.value = r["Position Applied For"] || "";
-
-      // Optional: make read-only
-      form.fullname.readOnly = true;
-      form.contact.readOnly = true;
-      form.email.readOnly = true;
-
-      status.textContent = "✅ Candidate data loaded successfully";
-      status.style.color = "green";
+      // Autofill form
+      document.getElementById("fullname").value = data.data.fullname || "";
+      document.getElementById("contact").value = data.data.contact || "";
+      document.getElementById("email").value = data.data.email || "";
+      document.getElementById("currentAddress").value = data.data.currentAddress || "";
+      document.getElementById("permanentAddress").value = data.data.permanentAddress || "";
+      document.getElementById("position").value = data.data.position || "";
     })
-    .catch((err) => {
-      console.error("GET fetch error:", err);
-      status.textContent = "⚠ Error fetching candidate data";
+    .catch(() => {
+      status.textContent = "Failed to load details!";
       status.style.color = "red";
     });
 
-  // 3️⃣ FINAL REMARK CHARACTER COUNT
-  const finalRemark = document.getElementById("finalRemark");
-  const remarkCount = document.getElementById("remarkCount");
-
-  finalRemark.addEventListener("input", () => {
-    const count = finalRemark.value.length;
-    remarkCount.textContent = `${count} / 50`;
-    remarkCount.style.color = count >= 45 ? "red" : "gray";
-  });
-
-  // 4️⃣ SUBMIT FOLLOW-UP FORM
-  form.addEventListener("submit", (e) => {
+  // Submit Form
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    status.textContent = "⏳ Submitting follow-up...";
-    status.style.color = "blue";
 
     const payload = {
-      phone: phoneFromLogin,
+      action: "followup",              // 🔥 REQUIRED
+      phone: phoneFromLogin,           // 🔥 REQUIRED
       interviewBy: form.interviewBy.value.trim(),
       trainingBy: form.trainingBy.value.trim(),
-      trainingStatus: form.trainingStatus.value.trim(),
-      selection: form.selection.value.trim(),
+      trainingStatus: form.trainingStatus.value,
+      selection: form.selection.value,
       finalRemark: form.finalRemark.value.trim(),
     };
 
-    fetch(WEB_APP_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/plain", // Matches your Apps Script
-      },
-      body: JSON.stringify(payload),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("POST response:", data);
+    status.textContent = "Submitting...";
+    status.style.color = "blue";
 
-        if (data.success) {
-          status.textContent = "✅ Follow-up submitted successfully!";
-          status.style.color = "green";
-
-          // Redirect to BGV if selection = Yes
-          if ((payload.selection || "").toLowerCase() === "yes") {
-            window.location.href = `bgv.html?phone=${encodeURIComponent(phoneFromLogin)}`;
-          } else {
-            form.reset();
-            remarkCount.textContent = "0 / 50";
-            remarkCount.style.color = "gray";
-          }
-        } else {
-          status.textContent = "⚠ Submission failed: " + (data.message || "Unknown error");
-          status.style.color = "red";
-        }
-      })
-      .catch((err) => {
-        console.error("POST error:", err);
-        status.textContent = "❌ Error submitting follow-up";
-        status.style.color = "red";
+    try {
+      const res = await fetch(WEB_APP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(payload),
       });
+
+      const result = await res.json();
+
+      if (result.success) {
+        status.textContent = "Submitted successfully!";
+        status.style.color = "green";
+
+        // Redirect to BGV page
+        setTimeout(() => {
+          window.location.href = `bgv.html?phone=${phoneFromLogin}`;
+        }, 1000);
+      } else {
+        status.textContent = "Submission failed: " + result.message;
+        status.style.color = "red";
+      }
+    } catch (err) {
+      status.textContent = "Submission failed!";
+      status.style.color = "red";
+    }
   });
 });
