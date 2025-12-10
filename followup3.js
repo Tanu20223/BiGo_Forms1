@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ====== FETCH CANDIDATE DATA ======
-  fetch(${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)})
+  fetch(`${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)}`)
     .then(res => res.json())
     .then(data => {
       console.log("GET response:", data);
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         status.innerText = "✅ Candidate data loaded successfully.";
       } else {
-        status.innerText = "⚠ " + (data.message || "Record not found");
+        status.innerText = "⚠️ " + (data.message || "Record not found");
       }
     })
     .catch(err => {
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   finalRemark.addEventListener("input", () => {
     const count = finalRemark.value.length;
-    remarkCount.textContent = ${count} / 50;
+    remarkCount.textContent = `${count} / 50`;
 
     // Optional: change color when near limit
     if (count >= 45) {
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
           status.innerText = "✅ Follow-up submitted successfully!";
 
           if ((data.selection || "").toLowerCase() === "yes") {
-            window.location.href = bgv.html?phone=${encodeURIComponent(phoneFromLogin)};
+            window.location.href = `bgv.html?phone=${encodeURIComponent(phoneFromLogin)}`;
           } else {
             form.reset();
             remarkCount.textContent = "0 / 50";
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
         } else {
-          status.innerText = "⚠ Submission failed: " + (result.message || "Unknown error");
+          status.innerText = "⚠️ Submission failed: " + (result.message || "Unknown error");
         }
       })
       .catch(err => {
@@ -99,6 +99,3 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
-
-
-
