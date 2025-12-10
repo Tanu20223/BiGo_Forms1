@@ -73,9 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch(WEB_APP_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"   // IMPORTANT: must match Apps Script
+        "Content-Type": "text/plain"   // IMPORTANT: must match Apps Script
       },
       body: JSON.stringify(payload)
     })
     .
+
 
