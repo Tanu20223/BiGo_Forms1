@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const remarkCount = document.getElementById("remarkCount");
 
   // YOUR WEB APP URL ↓
-  const WEB_APP_URL = "YOUR_DEPLOYED_WEB_APP_URL";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw54eK_nkV2iEtcbC-q01IQLaSyV2y2s1UImHbuDn1m6giLigILkOo_h_jEmHM1qNys7g/exec";
 
   /**
    * -------------------------------------
@@ -78,3 +78,4 @@ document.addEventListener("DOMContentLoaded", () => {
       body: JSON.stringify(payload)
     })
     .
+
