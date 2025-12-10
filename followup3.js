@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   finalRemark.addEventListener("input", () => {
     const count = finalRemark.value.length;
-    remarkCount.textContent = ${count} / 50;
+    remarkCount.textContent = `${count} / 50`;
 
     // Optional: change color when near limit
     if (count >= 45) {
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
