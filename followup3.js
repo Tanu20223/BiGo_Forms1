@@ -2,9 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  // 🔹 Replace with your deployed Apps Script Web App URL
-  const WEB_APP_URL =
-    "https://script.google.com/macros/s/AKfycbw54eK_nkV2iEtcbC-q01IQLaSyV2y2s1UImHbuDn1m6giLigILkOo_h_jEmHM1qNys7g/exec";
+  // Your deployed Apps Script Web App URL
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw54eK_nkV2iEtcbC-q01IQLaSyV2y2s1UImHbuDn1m6giLigILkOo_h_jEmHM1qNys7g/exec";
 
   // 1️⃣ GET PHONE FROM URL
   const urlParams = new URLSearchParams(window.location.search);
@@ -16,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Put phone into hidden field (Apps Script expects `phone`)
+  // Set hidden phone field
   const phoneField = document.getElementById("phone");
   if (phoneField) phoneField.value = phoneFromLogin;
 
@@ -24,15 +23,17 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch(`${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)}`)
     .then((res) => res.json())
     .then((data) => {
+      console.log("GET response:", data);
+
       if (!data.success) {
-        status.textContent = "⚠ Phone not found in sheet";
+        status.textContent = "❌ No data found for this phone!";
         status.style.color = "red";
         return;
       }
 
       const r = data.record || {};
 
-      // Auto-fill form fields
+      // Fill form fields
       form.fullname.value = r["Full Name"] || "";
       form.contact.value = r["Contact Number"] || "";
       form.email.value = r["Email Address"] || "";
@@ -40,16 +41,16 @@ document.addEventListener("DOMContentLoaded", () => {
       form.permanentAddress.value = r["Permanent Address"] || "";
       form.position.value = r["Position Applied For"] || "";
 
-      // Optional: make auto-filled fields read-only
+      // Optional: make read-only
       form.fullname.readOnly = true;
       form.contact.readOnly = true;
       form.email.readOnly = true;
 
-      status.textContent = "✅ Candidate data loaded";
+      status.textContent = "✅ Candidate data loaded successfully";
       status.style.color = "green";
     })
     .catch((err) => {
-      console.error("GET error:", err);
+      console.error("GET fetch error:", err);
       status.textContent = "⚠ Error fetching candidate data";
       status.style.color = "red";
     });
@@ -70,9 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
     status.textContent = "⏳ Submitting follow-up...";
     status.style.color = "blue";
 
-    // Prepare payload
     const payload = {
-      phone: phoneFromLogin, // REQUIRED for Apps Script
+      phone: phoneFromLogin,
       interviewBy: form.interviewBy.value.trim(),
       trainingBy: form.trainingBy.value.trim(),
       trainingStatus: form.trainingStatus.value.trim(),
@@ -89,11 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log("POST response:", data);
+
         if (data.success) {
           status.textContent = "✅ Follow-up submitted successfully!";
           status.style.color = "green";
 
-          // Redirect to BGV page if selection = Yes
+          // Redirect to BGV if selection = Yes
           if ((payload.selection || "").toLowerCase() === "yes") {
             window.location.href = `bgv.html?phone=${encodeURIComponent(phoneFromLogin)}`;
           } else {
