@@ -88,9 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
             remarkCount.textContent = "0 / 50";
             remarkCount.style.color = "gray";
           }
-        } else {
-          status.innerText = "⚠ Submission failed: " + (result.message || "Unknown error");
-        }
+        } 
       })
       .catch(err => {
         console.error("POST error:", err);
@@ -98,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
