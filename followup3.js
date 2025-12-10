@@ -3,19 +3,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxgszLRWrFH7JRyMJ6tcO4NPG75cs22JVy_UGDdH8UhMkTKz1obOG4ES__pCLOHIPfNcw/exec"; // <- Replace only this
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxgszLRWrFH7JRyMJ6tcO4NPG75cs22JVy_UGDdH8UhMkTKz1obOG4ES__pCLOHIPfNcw/exec";  // Replace only this
 
-  // First fetch phone from input (no html change)
-  const phoneInput = document.querySelector("input[name='phone'], #phone");
+  // Get phone from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const phone = urlParams.get("phone");
 
-  if (!phoneInput) {
-    console.error("Phone input not found!");
+  if (!phone) {
+    status.innerHTML = "❌ Phone missing in URL!";
     return;
   }
 
-  const phone = phoneInput.value.trim();
-
-  // Lookup data
+  // Lookup
   fetch(`${WEB_APP_URL}?action=lookup&phone=${phone}`)
     .then(res => res.json())
     .then(data => {
@@ -24,20 +23,23 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Fill the form values (IDs are same as you showed)
       document.getElementById("fullname").value = data.fullname;
       document.getElementById("contact").value = data.contact;
       document.getElementById("email").value = data.email;
+
+      // Store phone to hidden field
+      document.getElementById("currentPhone").value = phone;
     });
 
-  // Form submit
+  // Submit
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const payload = {
       action: "followup",
-      phone: document.getElementById("contact").value.trim(),
+      phone: document.getElementById("currentPhone").value.trim(),
       fullname: document.getElementById("fullname").value.trim(),
+      contact: document.getElementById("contact").value.trim(),
       email: document.getElementById("email").value.trim(),
       trainingBy: document.getElementById("trainingBy").value.trim(),
       trainingStatus: document.getElementById("trainingStatus").value.trim(),
@@ -47,22 +49,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const res = await fetch(WEB_APP_URL, {
       method: "POST",
-      headers: { "Content-Type": "text/plain" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
 
     const out = await res.json();
 
     if (!out.success) {
-      status.innerHTML = "❌ Error: " + out.message;
+      status.innerHTML = "❌ " + out.message;
       return;
     }
 
-    status.innerHTML = "✔ Data saved! Redirecting...";
+    status.innerHTML = "✔ Saved! Redirecting...";
 
     setTimeout(() => {
-      window.location.href = "bgv.html";
-    }, 800);
+      window.location.href = "bgv.html?phone=" + phone;
+    }, 500);
   });
 
 });
