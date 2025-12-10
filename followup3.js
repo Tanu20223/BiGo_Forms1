@@ -1,54 +1,69 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
+  const lookupPhone = document.getElementById("phone");
 
-  // YOUR WEB APP URL
-  const WEB_APP_URL =
-    "https://script.google.com/macros/s/AKfycbw54eK_nkV2iEtcbC-q01IQLaSyV2y2s1UImHbuDn1m6giLigILkOo_h_jEmHM1qNys7g/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwQkPLPnP7Gv6-gFDMmYjet3w64_Kh6XwY_OpyFgLaNgnnKN9DoAOhxIRetth2sR0-xdQ/exec"; // paste your deployed final URL
 
-  // GET phone from URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const phoneFromLogin = urlParams.get("phone");
+  // ---------------------------
+  // 🔍 AUTO LOOKUP FROM SHEET
+  // ---------------------------
+  lookupPhone.addEventListener("blur", async () => {
+    const phone = lookupPhone.value.trim();
 
-  // Set hidden phone field
-  document.getElementById("currentPhone").value = phoneFromLogin;
+    if (!phone) return;
 
-  // Load user data
-  fetch(`${WEB_APP_URL}?action=lookup&phone=${phoneFromLogin}`)
-    .then((res) => res.json())
-    .then((data) => {
-      if (!data.success || !data.data) {
+    status.textContent = "Checking number...";
+    status.style.color = "blue";
+
+    try {
+      const res = await fetch(`${WEB_APP_URL}?action=lookup&phone=${phone}`);
+      const data = await res.json();
+
+      console.log("Lookup Response:", data);
+
+      if (!data.success || !data.record) {
         status.textContent = "No data found for this phone!";
         status.style.color = "red";
         return;
       }
 
-      // Autofill form
-      document.getElementById("fullname").value = data.data.fullname || "";
-      document.getElementById("contact").value = data.data.contact || "";
-      document.getElementById("email").value = data.data.email || "";
-      document.getElementById("currentAddress").value = data.data.currentAddress || "";
-      document.getElementById("permanentAddress").value = data.data.permanentAddress || "";
-      document.getElementById("position").value = data.data.position || "";
-    })
-    .catch(() => {
-      status.textContent = "Failed to load details!";
-      status.style.color = "red";
-    });
+      // 🎉 Data Found → Fill Form
+      document.getElementById("fullname").value = data.record.fullname || "";
+      document.getElementById("contact").value = data.record.contact || "";
+      document.getElementById("email").value = data.record.email || "";
+      document.getElementById("trainingBy").value = data.record.trainingBy || "";
+      document.getElementById("trainingStatus").value = data.record.trainingStatus || "";
 
-  // Submit Form
+      status.textContent = "Data found!";
+      status.style.color = "green";
+
+    } catch (err) {
+      console.error(err);
+      status.textContent = "Error checking phone!";
+      status.style.color = "red";
+    }
+  });
+
+  // ---------------------------
+  // ✅ SUBMIT FOLLOWUP FORM
+  // ---------------------------
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const payload = {
-      action: "followup",              // 🔥 REQUIRED
-      phone: phoneFromLogin,           // 🔥 REQUIRED
-      interviewBy: form.interviewBy.value.trim(),
-      trainingBy: form.trainingBy.value.trim(),
-      trainingStatus: form.trainingStatus.value,
-      selection: form.selection.value,
-      finalRemark: form.finalRemark.value.trim(),
+    const formData = {
+      action: "followup",
+      phone: lookupPhone.value.trim(),
+      fullname: document.getElementById("fullname").value.trim(),
+      contact: document.getElementById("contact").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      trainingBy: document.getElementById("trainingBy").value.trim(),
+      trainingStatus: document.getElementById("trainingStatus").value.trim(),
+      selection: document.getElementById("selection").value.trim(),
+      finalRemark: document.getElementById("finalRemark").value.trim(),
     };
+
+    console.log("Submitting Followup:", formData);
 
     status.textContent = "Submitting...";
     status.style.color = "blue";
@@ -56,29 +71,31 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch(WEB_APP_URL, {
         method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
-      const result = await res.json();
+      const data = await res.json();
+      console.log("Submit Response:", data);
 
-      if (result.success) {
-        status.textContent = "Submitted successfully!";
+      if (data.success) {
+        status.textContent = "Saved successfully!";
         status.style.color = "green";
 
-        // Redirect to BGV page
+        // redirect after success
         setTimeout(() => {
-          window.location.href = `bgv.html?phone=${phoneFromLogin}`;
-        }, 1000);
+          window.location.href = "bgv.html";
+        }, 800);
+
       } else {
-        status.textContent = "Submission failed: " + result.message;
+        status.textContent = "Saving failed!";
         status.style.color = "red";
       }
+
     } catch (err) {
-      status.textContent = "Submission failed!";
+      console.error(err);
+      status.textContent = "Submit error!";
       status.style.color = "red";
     }
   });
 });
-
-
