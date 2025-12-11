@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbztgnPYghPbVxE6k6LrZeDRGpf_rEFT-Y55Mfne8SIPO4MlE1xlV_hRapjcVszXbMkcdg/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwI1kZrnDQFE7B7hKkxMO6JDraztTaj0UQYzlfaJV1bk2TGPSGWsr0lQZsjJp-DC3Y8bg/exec";
   const urlParams = new URLSearchParams(window.location.search);
   const phoneFromLogin = urlParams.get("phone");
 
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ====== FETCH CANDIDATE DATA ======
-  fetch(`${WEB_APP_URL}?action=getDetails&phone=${encodeURIComponent(phoneFromLogin)}`)
+  fetch(`${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)}`)
     .then(res => res.json())
     .then(data => {
       console.log("GET response:", data);
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
