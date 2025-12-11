@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ====== FETCH CANDIDATE DATA ======
-  fetch(`${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)}`)
+  fetch(`${WEB_APP_URL}?action=getDetails&phone=${encodeURIComponent(phoneFromLogin)}`)
     .then(res => res.json())
     .then(data => {
       console.log("GET response:", data);
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
