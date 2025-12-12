@@ -1,9 +1,8 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("followupForm");
   const status = document.getElementById("status");
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxHNFE9iuzmSWXJKVye-uGRUPSWpdWVIiAB0P6kqrNIMUIBkK_zTbNJhvAfyQ4ofqlRGw/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxPwUc5Wa-rYmDkPMgGYjFXD5ouyqUt-FHz3rvtyRwsBJtOqMFMDDSj3qJP5lvpxEKwCQ/exec";
   const urlParams = new URLSearchParams(window.location.search);
   const phoneFromLogin = urlParams.get("phone");
 
@@ -14,12 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ====== FETCH CANDIDATE DATA ======
-  fetch(`${WEB_APP_URL}?action=getDetails&phone=${encodeURIComponent(phoneFromLogin)}`)
+  fetch(`${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)}`)
     .then(res => res.json())
     .then(data => {
       console.log("GET response:", data);
-      if (data.success || data.status === true) {
-        const r = data.data || {};
+      if (data.success) {
+        const r = data.record || {};
         form.fullname.value = r["Full Name"] || "";
         form.contact.value = r["Contact Number"] || phoneFromLogin;
         form.email.value = r["Email Address"] || "";
@@ -99,18 +98,5 @@ document.addEventListener("DOMContentLoaded", () => {
         status.innerText = "❌ Error submitting follow-up data.";
       });
   });
-});   both same error  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+});
+this is the followup js code.
