@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fetch(WEB_APP_URL, {
       method: "POST",
-      headers: { "Content-Type": "text/plain" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     })
       .then(res => res.json())
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
