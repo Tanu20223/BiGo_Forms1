@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(data => {
       console.log("GET response:", data);
-      if (data.success) {
+      if (data.success || data.status === true) {
         const r = data.record || {};
         form.fullname.value = r["Full Name"] || "";
         form.contact.value = r["Contact Number"] || phoneFromLogin;
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
 
 
 
