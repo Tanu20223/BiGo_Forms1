@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const status = document.getElementById("status");
 
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzvAqircKR1eSCRwwweR2-NTRkm1b78dnAc5PuSWZnaZzOufjNxXnmXTjmfPhtEs5SaZw/exec";
+
   const urlParams = new URLSearchParams(window.location.search);
   const phoneFromLogin = urlParams.get("phone");
 
@@ -12,15 +13,17 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // ====== FETCH CANDIDATE DATA ======
+  // ====== GET DATA ======
   fetch(`${WEB_APP_URL}?action=getDetails&phone=${encodeURIComponent(phoneFromLogin)}`)
     .then(res => res.json())
     .then(data => {
-      console.log("GET response:", data);
-      if (data.success || data.status === true) {
+      console.log("GET Response:", data);
+
+      if (data.status === true) {
         const r = data.data || {};
+
         form.fullname.value = r["Full Name"] || "";
-        form.contact.value = r["Contact Number"] || phoneFromLogin;
+        form.contact.value = r["Contact Number"] || "";
         form.email.value = r["Email Address"] || "";
         form.currentAddress.value = r["Current Address"] || "";
         form.permanentAddress.value = r["Permanent Address"] || "";
@@ -30,44 +33,38 @@ document.addEventListener("DOMContentLoaded", () => {
         form.contact.readOnly = true;
         form.email.readOnly = true;
 
-        status.innerText = "✅ Candidate data loaded successfully.";
+        status.innerText = "✅ Candidate data loaded.";
       } else {
         status.innerText = "⚠️ " + (data.message || "Record not found");
       }
     })
     .catch(err => {
-      console.error("GET fetch error:", err);
-      status.innerText = "❌ Error fetching candidate data.";
+      console.error("GET Error:", err);
+      status.innerText = "❌ Error fetching data.";
     });
 
-  // ====== FINAL REMARK CHARACTER LIMIT ======
+  // ====== REMARK COUNT ======
   const finalRemark = document.getElementById("finalRemark");
   const remarkCount = document.getElementById("remarkCount");
 
   finalRemark.addEventListener("input", () => {
     const count = finalRemark.value.length;
     remarkCount.textContent = `${count} / 50`;
-
-    // Optional: change color when near limit
-    if (count >= 45) {
-      remarkCount.style.color = "red";
-    } else {
-      remarkCount.style.color = "gray";
-    }
+    remarkCount.style.color = count >= 45 ? "red" : "gray";
   });
 
-  // ====== SUBMIT FOLLOW-UP ======
+  // ====== SUBMIT ======
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    status.innerText = "⏳ Submitting follow-up data...";
+    status.innerText = "⏳ Submitting...";
 
     const data = {
       phone: phoneFromLogin,
-      interviewBy: form.interviewBy.value.trim(),
-      trainingBy: form.trainingBy.value.trim(),
-      trainingStatus: form.trainingStatus.value.trim(),
-      selection: form.selection.value.trim(),
-      finalRemark: form.finalRemark.value.trim()
+      interviewBy: form.interviewBy.value,
+      trainingBy: form.trainingBy.value,
+      trainingStatus: form.trainingStatus.value,
+      selection: form.selection.value,
+      finalRemark: form.finalRemark.value
     };
 
     fetch(WEB_APP_URL, {
@@ -77,40 +74,25 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then(res => res.json())
       .then(result => {
-        console.log("POST response:", result);
+        console.log("POST Response:", result);
+
         if (result.success) {
-          status.innerText = "✅ Follow-up submitted successfully!";
+          status.innerText = "✅ Follow-up submitted!";
 
           if ((data.selection || "").toLowerCase() === "yes") {
             window.location.href = `bgv.html?phone=${encodeURIComponent(phoneFromLogin)}`;
           } else {
             form.reset();
             remarkCount.textContent = "0 / 50";
-            remarkCount.style.color = "gray";
           }
 
         } else {
-          status.innerText = "⚠️ Submission failed: " + (result.message || "Unknown error");
+          status.innerText = "⚠️ Failed: " + (result.message || "Unknown error");
         }
       })
       .catch(err => {
-        console.error("POST error:", err);
-        status.innerText = "❌ Error submitting follow-up data.";
+        console.error("POST Error:", err);
+        status.innerText = "❌ Error submitting data.";
       });
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
