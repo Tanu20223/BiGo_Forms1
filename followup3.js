@@ -1,5 +1,8 @@
-let latitude = '';
-let longitude = '';
+const WEB_APP_URL =
+  "https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxx/exec";
+
+let latitude = "";
+let longitude = "";
 
 // 📍 GPS LOCATION
 if (navigator.geolocation) {
@@ -8,7 +11,7 @@ if (navigator.geolocation) {
       latitude = pos.coords.latitude;
       longitude = pos.coords.longitude;
     },
-    () => alert('Please allow location for attendance')
+    () => alert("Please allow location for attendance")
   );
 }
 
@@ -42,7 +45,7 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
     return;
   }
 
-  const data = {
+  const payload = {
     inOut: inOut.value,
     riderName,
     phone,
@@ -58,17 +61,29 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
     longitude
   };
 
-  // ⚠️ This will work ONLY inside Google Apps Script Web App
-  if (typeof google !== "undefined") {
-    google.script.run.withSuccessHandler(res => {
+  try {
+    const res = await fetch(WEB_APP_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const json = await res.json();
+
+    if (json.success) {
       msg.style.color = "green";
-      msg.textContent = res;
-    }).submitAttendance(data);
-  } else {
-    // VS Code / Browser test mode
-    console.log("Form Data:", data);
-    msg.style.color = "green";
-    msg.textContent = "Form validated (local test)";
+      msg.textContent = json.message || "Submitted successfully";
+    } else {
+      msg.style.color = "red";
+      msg.textContent = json.message || "Submission failed";
+    }
+
+  } catch (err) {
+    console.error(err);
+    msg.style.color = "red";
+    msg.textContent = "Server error. Try again.";
   }
 });
 
