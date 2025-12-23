@@ -1,106 +1,86 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("followupForm");
-  const status = document.getElementById("status");
+let latitude = '';
+let longitude = '';
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxgrAmKvTSUvmDzqglHxdD-fNuMjrrGnTGmhNtpw12DvH_IccKU0gNsE837GIUSIJB2Og/exec";
-  const urlParams = new URLSearchParams(window.location.search);
-  const phoneFromLogin = urlParams.get("phone");
+// 📍 GPS LOCATION
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      latitude = pos.coords.latitude;
+      longitude = pos.coords.longitude;
+    },
+    () => alert('Please allow location for attendance')
+  );
+}
 
-  if (!phoneFromLogin) {
-    alert("❌ Missing phone number in URL. Use ?phone=XXXXXXXXXX");
-    status.innerText = "❌ Missing phone number in URL.";
+// 📷 Convert file to Base64
+function getBase64(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+// SUBMIT HANDLER
+document.getElementById("submitBtn").addEventListener("click", async () => {
+  const msg = document.getElementById("msg");
+  msg.style.color = "orange";
+  msg.textContent = "Submitting...";
+
+  const riderName = riderNameEl.value.trim();
+  const phone = phoneEl.value.trim();
+  const selfie = selfieEl.files[0];
+  const odometer = odometerEl.files[0];
+
+  if (!riderName || !phone) {
+    alert("Rider Name and Phone are mandatory");
     return;
   }
 
-  // ====== FETCH CANDIDATE DATA ======
-  fetch(`${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phoneFromLogin)}`)
-    .then(res => res.json())
-    .then(data => {
-      console.log("GET response:", data);
-      if (data.success) {
-        const r = data.record || {};
-        form.fullname.value = r["Full Name"] || "";
-        form.contact.value = r["Contact Number"] || phoneFromLogin;
-        form.email.value = r["Email Address"] || "";
-        form.currentAddress.value = r["Current Address"] || "";
-        form.permanentAddress.value = r["Permanent Address"] || "";
-        form.position.value = r["Position Applied For"] || "";
+  if (!selfie || !odometer) {
+    alert("Please capture both Selfie and Odometer photo");
+    return;
+  }
 
-        form.fullname.readOnly = true;
-        form.contact.readOnly = true;
-        form.email.readOnly = true;
+  const data = {
+    inOut: inOut.value,
+    riderName,
+    phone,
+    client: client.value,
+    reportingTime: reportingTime.value,
+    reportingKm: reportingKm.value,
+    reportingCharge: reportingCharge.value,
+    currentLocation: currentLocation.value,
+    selfie: await getBase64(selfie),
+    odometer: await getBase64(odometer),
+    tShirt: tShirt.value,
+    latitude,
+    longitude
+  };
 
-        status.innerText = "✅ Candidate data loaded successfully.";
-      } else {
-        status.innerText = "⚠️ " + (data.message || "Record not found");
-      }
-    })
-    .catch(err => {
-      console.error("GET fetch error:", err);
-      status.innerText = "❌ Error fetching candidate data.";
-    });
-
-  // ====== FINAL REMARK CHARACTER LIMIT ======
-  const finalRemark = document.getElementById("finalRemark");
-  const remarkCount = document.getElementById("remarkCount");
-
-  finalRemark.addEventListener("input", () => {
-    const count = finalRemark.value.length;
-    remarkCount.textContent = `${count} / 50`;
-
-    // Optional: change color when near limit
-    if (count >= 45) {
-      remarkCount.style.color = "red";
-    } else {
-      remarkCount.style.color = "gray";
-    }
-  });
-
-  // ====== SUBMIT FOLLOW-UP ======
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    status.innerText = "⏳ Submitting follow-up data...";
-
-    const data = {
-      phone: phoneFromLogin,
-      interviewBy: form.interviewBy.value.trim(),
-      trainingBy: form.trainingBy.value.trim(),
-      trainingStatus: form.trainingStatus.value.trim(),
-      selection: form.selection.value.trim(),
-      finalRemark: form.finalRemark.value.trim()
-    };
-
-    fetch(WEB_APP_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then(result => {
-        console.log("POST response:", result);
-        if (result.success) {
-          status.innerText = "✅ Follow-up submitted successfully!";
-
-          if ((data.selection || "").toLowerCase() === "yes") {
-            window.location.href = `bgv.html?phone=${encodeURIComponent(phoneFromLogin)}`;
-          } else {
-            form.reset();
-            remarkCount.textContent = "0 / 50";
-            remarkCount.style.color = "gray";
-          }
-
-        } else {
-          status.innerText = "⚠️ Submission failed: " + (result.message || "Unknown error");
-        }
-      })
-      .catch(err => {
-        console.error("POST error:", err);
-        status.innerText = "❌ Error submitting follow-up data.";
-      });
-  });
+  // ⚠️ This will work ONLY inside Google Apps Script Web App
+  if (typeof google !== "undefined") {
+    google.script.run.withSuccessHandler(res => {
+      msg.style.color = "green";
+      msg.textContent = res;
+    }).submitAttendance(data);
+  } else {
+    // VS Code / Browser test mode
+    console.log("Form Data:", data);
+    msg.style.color = "green";
+    msg.textContent = "Form validated (local test)";
+  }
 });
 
-
-
-
-
+// ELEMENT SHORTCUTS
+const inOut = document.getElementById("inOut");
+const riderNameEl = document.getElementById("riderName");
+const phoneEl = document.getElementById("phone");
+const client = document.getElementById("client");
+const reportingTime = document.getElementById("reportingTime");
+const reportingKm = document.getElementById("reportingKm");
+const reportingCharge = document.getElementById("reportingCharge");
+const currentLocation = document.getElementById("currentLocation");
+const selfieEl = document.getElementById("selfie");
+const odometerEl = document.getElementById("odometer");
+const tShirt = document.getElementById("tShirt");
