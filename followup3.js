@@ -1,102 +1,74 @@
 const WEB_APP_URL =
   "https://script.google.com/macros/s/AKfycbyx0oIr5GKbIe2PYMTbnWgRM3UWMyV_k2JOiMLYiw-H_QruFB0oEYB2QoX-JhHx_kt-RQ/exec";
 
-let latitude = "";
-let longitude = "";
+document.addEventListener("DOMContentLoaded", () => {
 
-// 📍 GPS LOCATION
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      latitude = pos.coords.latitude;
-      longitude = pos.coords.longitude;
-    },
-    () => alert("Please allow location for attendance")
-  );
-}
+  const params = new URLSearchParams(window.location.search);
+  const phone = params.get("phone");
+  const status = document.getElementById("status");
+  const form = document.getElementById("followupForm");
 
-// 📷 Convert file to Base64
-function getBase64(file) {
-  return new Promise(resolve => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(file);
-  });
-}
-
-// SUBMIT HANDLER
-document.getElementById("submitBtn").addEventListener("click", async () => {
-  const msg = document.getElementById("msg");
-  msg.style.color = "orange";
-  msg.textContent = "Submitting...";
-
-  const riderName = riderNameEl.value.trim();
-  const phone = phoneEl.value.trim();
-  const selfie = selfieEl.files[0];
-  const odometer = odometerEl.files[0];
-
-  if (!riderName || !phone) {
-    alert("Rider Name and Phone are mandatory");
+  if (!phone) {
+    status.innerText = "❌ Missing phone in URL";
     return;
   }
 
-  if (!selfie || !odometer) {
-    alert("Please capture both Selfie and Odometer photo");
-    return;
-  }
+  // ===== FETCH CANDIDATE DATA =====
+  fetch(`${WEB_APP_URL}?action=getFollowup&phone=${encodeURIComponent(phone)}`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) {
+        status.innerText = "⚠️ " + data.message;
+        return;
+      }
 
-  const payload = {
-    inOut: inOut.value,
-    riderName,
-    phone,
-    client: client.value,
-    reportingTime: reportingTime.value,
-    reportingKm: reportingKm.value,
-    reportingCharge: reportingCharge.value,
-    currentLocation: currentLocation.value,
-    selfie: await getBase64(selfie),
-    odometer: await getBase64(odometer),
-    tShirt: tShirt.value,
-    latitude,
-    longitude
-  };
+      const r = data.record;
 
-  try {
-    const res = await fetch(WEB_APP_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
+      fullname.value = r.fullName || "";
+      contact.value = r.contact || "";
+      email.value = r.email || "";
+      currentAddress.value = r.currentAddress || "";
+      permanentAddress.value = r.permanentAddress || "";
+      position.value = r.position || "";
+
+      status.innerText = "✅ Candidate data loaded";
+    })
+    .catch(() => {
+      status.innerText = "❌ Error fetching data";
     });
 
-    const json = await res.json();
+  // ===== CHARACTER COUNTER =====
+  finalRemark.addEventListener("input", () => {
+    remarkCount.textContent = `${finalRemark.value.length} / 50`;
+    remarkCount.style.color =
+      finalRemark.value.length >= 45 ? "red" : "gray";
+  });
 
-    if (json.success) {
-      msg.style.color = "green";
-      msg.textContent = json.message || "Submitted successfully";
-    } else {
-      msg.style.color = "red";
-      msg.textContent = json.message || "Submission failed";
-    }
+  // ===== SUBMIT FOLLOW-UP =====
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    status.innerText = "⏳ Submitting...";
 
-  } catch (err) {
-    console.error(err);
-    msg.style.color = "red";
-    msg.textContent = "Server error. Try again.";
-  }
+    fetch(WEB_APP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        phone,
+        interviewBy: interviewBy.value.trim(),
+        trainingBy: trainingBy.value.trim(),
+        trainingStatus: trainingStatus.value,
+        selection: selection.value,
+        finalRemark: finalRemark.value.trim()
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      status.innerText = res.success
+        ? "✅ Follow-up submitted successfully!"
+        : "❌ " + res.message;
+    })
+    .catch(() => {
+      status.innerText = "❌ Submission error";
+    });
+  });
 });
-
-// ELEMENT SHORTCUTS
-const inOut = document.getElementById("inOut");
-const riderNameEl = document.getElementById("riderName");
-const phoneEl = document.getElementById("phone");
-const client = document.getElementById("client");
-const reportingTime = document.getElementById("reportingTime");
-const reportingKm = document.getElementById("reportingKm");
-const reportingCharge = document.getElementById("reportingCharge");
-const currentLocation = document.getElementById("currentLocation");
-const selfieEl = document.getElementById("selfie");
-const odometerEl = document.getElementById("odometer");
-const tShirt = document.getElementById("tShirt");
-
